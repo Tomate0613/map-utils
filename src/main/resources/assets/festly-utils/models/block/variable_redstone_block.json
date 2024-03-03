@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "festly-utils:block/variable_redstone_block"
+  }
+}
+
