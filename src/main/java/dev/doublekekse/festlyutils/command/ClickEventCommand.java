@@ -16,14 +16,17 @@ import static net.minecraft.commands.Commands.literal;
 
 public class ClickEventCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        var argumentBuilder = argument("player", EntityArgument.player()).then(argument("value", StringArgumentType.greedyString()).executes(context -> handle(context, ClickEvent.Action.OPEN_URL)));
+        var openUrl = argument("player", EntityArgument.player()).then(argument("value", StringArgumentType.greedyString()).executes(context -> handle(context, ClickEvent.Action.OPEN_URL)));
+        var openFile = argument("player", EntityArgument.player()).then(argument("value", StringArgumentType.greedyString()).executes(context -> handle(context, ClickEvent.Action.OPEN_FILE)));
+        var suggestCommand = argument("player", EntityArgument.player()).then(argument("value", StringArgumentType.greedyString()).executes(context -> handle(context, ClickEvent.Action.SUGGEST_COMMAND)));
+        var copy = argument("player", EntityArgument.player()).then(argument("value", StringArgumentType.greedyString()).executes(context -> handle(context, ClickEvent.Action.COPY_TO_CLIPBOARD)));
 
         dispatcher.register(
             literal("clickevent").requires(source -> source.hasPermission(2))
-                .then(literal("open_url").then(argumentBuilder))
-                .then(literal("open_file").then(argumentBuilder))
-                .then(literal("suggest_command").then(argumentBuilder))
-                .then(literal("copy_to_clipboard").then(argumentBuilder))
+                .then(literal("open_url").then(openUrl))
+                .then(literal("open_file").then(openFile))
+                .then(literal("suggest_command").then(suggestCommand))
+                .then(literal("copy_to_clipboard").then(copy))
         );
     }
 
