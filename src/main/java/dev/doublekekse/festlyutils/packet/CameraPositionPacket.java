@@ -1,7 +1,6 @@
 package dev.doublekekse.festlyutils.packet;
 
 import dev.doublekekse.festlyutils.FestlyUtils;
-import dev.doublekekse.festlyutils.duck.CameraDuck;
 import net.fabricmc.fabric.api.networking.v1.FabricPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.PacketType;

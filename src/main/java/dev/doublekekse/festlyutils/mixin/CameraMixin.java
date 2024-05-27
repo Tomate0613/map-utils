@@ -78,7 +78,7 @@ public abstract class CameraMixin implements CameraDuck {
             customPosition = null;
             customRotation = null;
             if (Minecraft.getInstance().player != null) {
-                ((AbstractClientPlayerDuck) Minecraft.getInstance().player).festlyUtils$setFov(-1);
+                Minecraft.getInstance().player.festlyUtils$setFov(-1);
             }
         }
 
@@ -149,7 +149,7 @@ public abstract class CameraMixin implements CameraDuck {
         this.progress = 0;
         this.cameraSpeed = cameraSpeed;
         if (Minecraft.getInstance().player != null) {
-            ((AbstractClientPlayerDuck) Minecraft.getInstance().player).festlyUtils$setFov(1);
+            Minecraft.getInstance().player.festlyUtils$setFov(1);
         }
     }
 }
