@@ -29,7 +29,7 @@ public record CameraRotationPacket(Vec2 rotation) implements FabricPacket {
 
     public static void handle(CameraRotationPacket packet, LocalPlayer player, PacketSender sender) {
         var client = Minecraft.getInstance();
-        var camera = (CameraDuck) client.gameRenderer.getMainCamera();
+        var camera = client.gameRenderer.getMainCamera();
 
         camera.festlyUtils$setRotation(packet.rotation);
     }

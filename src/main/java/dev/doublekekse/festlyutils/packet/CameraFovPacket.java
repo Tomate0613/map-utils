@@ -1,7 +1,6 @@
 package dev.doublekekse.festlyutils.packet;
 
 import dev.doublekekse.festlyutils.FestlyUtils;
-import dev.doublekekse.festlyutils.duck.AbstractClientPlayerDuck;
 import net.fabricmc.fabric.api.networking.v1.FabricPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
@@ -23,6 +22,6 @@ public record CameraFovPacket(float fov) implements FabricPacket {
     }
 
     public static void handle(CameraFovPacket packet, LocalPlayer player, PacketSender sender) {
-        ((AbstractClientPlayerDuck) player).festlyUtils$setFov(packet.fov);
+        player.festlyUtils$setFov(packet.fov);
     }
 }

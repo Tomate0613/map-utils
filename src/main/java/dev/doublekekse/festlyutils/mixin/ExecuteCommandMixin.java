@@ -5,7 +5,6 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import dev.doublekekse.festlyutils.duck.CommandSourceStackDuck;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.commands.ExecuteCommand;
@@ -40,7 +39,7 @@ public abstract class ExecuteCommandMixin {
 
             var entity = commandSourceStack.getEntity();
             assert entity != null;
-            ((CommandSourceStackDuck) commandSourceStack).festlyUtils$addSelector(StringArgumentType.getString(commandContext, "name"), entity);
+            commandSourceStack.festlyUtils$addSelector(StringArgumentType.getString(commandContext, "name"), entity);
 
             return commandSourceStack;
         }))));

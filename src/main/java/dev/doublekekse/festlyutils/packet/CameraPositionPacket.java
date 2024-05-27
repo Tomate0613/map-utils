@@ -26,7 +26,7 @@ public record CameraPositionPacket(Vec3 position) implements FabricPacket {
 
     public static void handle(CameraPositionPacket packet, LocalPlayer player, PacketSender sender) {
         var client = Minecraft.getInstance();
-        var camera = (CameraDuck) client.gameRenderer.getMainCamera();
+        var camera = client.gameRenderer.getMainCamera();
 
         camera.festlyUtils$setPosition(packet.position);
     }

@@ -50,7 +50,7 @@ public record CameraSplinePacket(PositionAndRotation[] path, float cameraSpeed) 
 
     public static void handle(CameraSplinePacket packet, LocalPlayer player, PacketSender sender) {
         var client = Minecraft.getInstance();
-        var camera = (CameraDuck) client.gameRenderer.getMainCamera();
+        var camera = client.gameRenderer.getMainCamera();
 
         camera.festlyUtils$setPosition(null);
         camera.festlyUtils$setRotation(null);

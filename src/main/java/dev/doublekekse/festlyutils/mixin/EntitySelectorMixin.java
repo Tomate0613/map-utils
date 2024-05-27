@@ -1,6 +1,5 @@
 package dev.doublekekse.festlyutils.mixin;
 
-import dev.doublekekse.festlyutils.duck.CommandSourceStackDuck;
 import dev.doublekekse.festlyutils.duck.EntitySelectorDuck;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.selector.EntitySelector;
@@ -22,7 +21,7 @@ public class EntitySelectorMixin implements EntitySelectorDuck {
     @Inject(method = "findEntitiesRaw", at = @At("HEAD"), cancellable = true)
     void findEntitiesRaw(CommandSourceStack commandSourceStack, CallbackInfoReturnable<List<? extends Entity>> cir) {
         if(userSelectorName != null) {
-            var entity = ((CommandSourceStackDuck)commandSourceStack).festlyUtils$getSelector(userSelectorName);
+            var entity = commandSourceStack.festlyUtils$getSelector(userSelectorName);
 
             if(entity == null) {
                 cir.setReturnValue(Collections.emptyList());

@@ -43,6 +43,6 @@ public class CommandSourceStackMixin implements CommandSourceStackDuck {
     @Inject(method = "/with.*/", at = @At("TAIL"))
     void copyState(CallbackInfoReturnable<CommandSourceStack> cir) {
         var newStack = cir.getReturnValue();
-        ((CommandSourceStackDuck) newStack).festlyUtils$setSelectors(selectors);
+        newStack.festlyUtils$setSelectors(selectors);
     }
 }

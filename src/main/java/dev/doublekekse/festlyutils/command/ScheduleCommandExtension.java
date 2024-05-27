@@ -3,7 +3,6 @@ package dev.doublekekse.festlyutils.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import dev.doublekekse.festlyutils.duck.CommandSourceStackDuck;
 import dev.doublekekse.festlyutils.timer.CommandCallback;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.TimeArgument;
@@ -23,7 +22,7 @@ public class ScheduleCommandExtension {
                 var command = StringArgumentType.getString(context, "command");
                 var timerQueue = source.getServer().getWorldData().overworldData().getScheduledEvents();
 
-                timerQueue.schedule(command, worldTime, new CommandCallback(command, source.getPosition(), source.getRotation(), ((CommandSourceStackDuck) source).festlyUtils$permissionLevel()));
+                timerQueue.schedule(command, worldTime, new CommandCallback(command, source.getPosition(), source.getRotation(), source.festlyUtils$permissionLevel()));
 
                 source.sendSuccess(() -> Component.translatable("commands.festly-utils.schedule.created.command", command, timeOffset, worldTime), true);
                 return 1;

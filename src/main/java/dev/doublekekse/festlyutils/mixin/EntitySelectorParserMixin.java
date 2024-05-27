@@ -4,7 +4,6 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import dev.doublekekse.festlyutils.duck.EntitySelectorDuck;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.commands.arguments.selector.EntitySelectorParser;
@@ -95,7 +94,8 @@ public abstract class EntitySelectorParserMixin {
     void getSelector(CallbackInfoReturnable<EntitySelector> cir) {
         if (userSelectorName != null && usesSelectors && !userSelectorName.isEmpty()) {
             var selector = new EntitySelector(1, true, worldLimited, null, distance, (vec3 -> vec3), null, EntitySelector.ORDER_ARBITRARY, false, null, entityUUID, null, true);
-            ((EntitySelectorDuck) selector).festlyUtils$userSelectorName(userSelectorName);
+
+            selector.festlyUtils$userSelectorName(userSelectorName);
 
             cir.setReturnValue(selector);
         }

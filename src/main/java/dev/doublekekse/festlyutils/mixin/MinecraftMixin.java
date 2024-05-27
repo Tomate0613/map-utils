@@ -1,8 +1,5 @@
 package dev.doublekekse.festlyutils.mixin;
 
-import dev.doublekekse.festlyutils.duck.AbstractClientPlayerDuck;
-import dev.doublekekse.festlyutils.duck.CameraDuck;
-import dev.doublekekse.festlyutils.duck.GuiDuck;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.screens.Screen;
@@ -49,12 +46,14 @@ public abstract class MinecraftMixin
 
     @Unique
     void resetCameraData() {
-        var camera = (CameraDuck) gameRenderer.getMainCamera();
+        var camera = gameRenderer.getMainCamera();
 
-        if(player != null) {
-            ((AbstractClientPlayerDuck) player).festlyUtils$setFov(-1);
+        if (player != null) {
+            player.festlyUtils$setFov(-1);
         }
-        ((GuiDuck) gui).festlyUtils$setOverlay(null, 0);
+
+        gui.festlyUtils$setOverlay(null, 0);
+
         camera.festlyUtils$setPosition(null);
         camera.festlyUtils$setRotation(null);
         camera.festlyUtils$setSpline(null, 1);

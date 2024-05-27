@@ -1,7 +1,6 @@
 package dev.doublekekse.festlyutils.packet;
 
 import dev.doublekekse.festlyutils.FestlyUtils;
-import dev.doublekekse.festlyutils.duck.GuiDuck;
 import net.fabricmc.fabric.api.networking.v1.FabricPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.PacketType;
@@ -26,8 +25,7 @@ public record CameraOverlayPacket(ResourceLocation overlayLocation, float overla
 
     public static void handle(CameraOverlayPacket packet, LocalPlayer player, PacketSender sender) {
         var client = Minecraft.getInstance();
-        var gui = ((GuiDuck) client.gui);
 
-        gui.festlyUtils$setOverlay(packet.overlayLocation, packet.overlayOpacity);
+        client.gui.festlyUtils$setOverlay(packet.overlayLocation, packet.overlayOpacity);
     }
 }
