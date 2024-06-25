@@ -14,7 +14,6 @@ public record CameraRotationPacket(Vec2 rotation, boolean interpolate) implement
     public static final CustomPacketPayload.Type<CameraRotationPacket> TYPE = new CustomPacketPayload.Type<>(MapUtils.identifier("camera_rotation_packet"));
 
     CameraRotationPacket(FriendlyByteBuf buf) {
-        // TODO No cast wtf
         this(buf.readNullable((b) -> new Vec2(b.readFloat(), b.readFloat())), buf.readBoolean());
     }
 
