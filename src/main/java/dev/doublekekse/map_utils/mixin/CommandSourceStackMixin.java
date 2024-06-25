@@ -42,9 +42,41 @@ public class CommandSourceStackMixin implements CommandSourceStackDuck {
     }
 
 
-    @Inject(method = "/with.*/", at = @At("TAIL"))
+    @Inject(method = {
+        "withAnchor",
+        "withCallback(Lnet/minecraft/commands/CommandResultCallback;)Lnet/minecraft/commands/ExecutionCommandSource;",
+        "withCallback(Lnet/minecraft/commands/CommandResultCallback;)Lnet/minecraft/commands/CommandSourceStack;",
+        "withCallback(Lnet/minecraft/commands/CommandResultCallback;Ljava/util/function/BinaryOperator;)Lnet/minecraft/commands/CommandSourceStack;",
+        "withEntity",
+        "withLevel",
+        "withMaximumPermission",
+        "withPermission",
+        "withPosition",
+        "withRotation",
+        "withSigningContext",
+        "withSource",
+        "withSuppressedOutput"
+    }, at = @At("TAIL"))
     void copyState(CallbackInfoReturnable<CommandSourceStack> cir) {
         var newStack = (CommandSourceStackDuck) cir.getReturnValue();
         newStack.mapUtils$setSelectors(selectors);
     }
+
+
+    /*
+    @Inject(method = "withAnchor", at = @At("TAIL"))
+    @Inject(method = "withCallback(Lnet/minecraft/commands/CommandResultCallback;)Lnet/minecraft/commands/ExecutionCommandSource;", at = @At("TAIL"))
+    @Inject(method = "withCallback(Lnet/minecraft/commands/CommandResultCallback;)Lnet/minecraft/commands/CommandSourceStack;", at = @At("TAIL"))
+    @Inject(method = "withCallback(Lnet/minecraft/commands/CommandResultCallback;Ljava/util/function/BinaryOperator;)Lnet/minecraft/commands/CommandSourceStack;", at = @At("TAIL"))
+    @Inject(method = "withEntity", at = @At("TAIL"))
+    @Inject(method = "withLevel", at = @At("TAIL"))
+    @Inject(method = "withMaximumPermission", at = @At("TAIL"))
+    @Inject(method = "withPermission", at = @At("TAIL"))
+    @Inject(method = "withPosition", at = @At("TAIL"))
+    @Inject(method = "withRotation", at = @At("TAIL"))
+    @Inject(method = "withSigningContext", at = @At("TAIL"))
+    @Inject(method = "withSource", at = @At("TAIL"))
+    @Inject(method = "withSuppressedOutput", at = @At("TAIL"))
+     */
+
 }

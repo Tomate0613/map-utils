@@ -25,7 +25,7 @@ public abstract class ExecuteCommandMixin {
     private static LiteralCommandNode<CommandSourceStack> entry;
 
     @Inject(method = "register", at = @At(value = "INVOKE", target = "Lcom/mojang/brigadier/CommandDispatcher;register(Lcom/mojang/brigadier/builder/LiteralArgumentBuilder;)Lcom/mojang/brigadier/tree/LiteralCommandNode;", ordinal = 1))
-    private static void reg(CommandDispatcher<CommandSourceStack> commandDispatcher, CommandBuildContext commandBuildContext, CallbackInfo ci, @Local(name = "literalCommandNode") LiteralCommandNode<CommandSourceStack> _entry) {
+    private static void reg(CommandDispatcher<CommandSourceStack> commandDispatcher, CommandBuildContext commandBuildContext, CallbackInfo ci, @Local LiteralCommandNode<CommandSourceStack> _entry) {
         entry = _entry;
     }
 
