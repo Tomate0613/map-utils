@@ -58,7 +58,7 @@ public class CameraCommand {
 
                         return 1;
                     })).then(literal("set").then(argument("overlayTexture", StringArgumentType.string()).then(argument("overlayOpacity", FloatArgumentType.floatArg(0, 1)).executes(context -> {
-                        var overlayLocation = new ResourceLocation(StringArgumentType.getString(context, "overlayTexture"));
+                        var overlayLocation = ResourceLocation.parse(StringArgumentType.getString(context, "overlayTexture"));
                         var overlayOpacity = FloatArgumentType.getFloat(context, "overlayOpacity");
 
                         if (context.getSource().getPlayer() == null) {

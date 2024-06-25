@@ -18,7 +18,7 @@ public class EntitySelectorMixin implements EntitySelectorDuck {
     @Unique
     private String userSelectorName = null;
 
-    @Inject(method = "findEntitiesRaw", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "findEntities", at = @At("HEAD"), cancellable = true)
     void findEntitiesRaw(CommandSourceStack commandSourceStack, CallbackInfoReturnable<List<? extends Entity>> cir) {
         if(userSelectorName != null) {
             var entity = commandSourceStack.festlyUtils$getSelector(userSelectorName);

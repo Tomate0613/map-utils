@@ -1,27 +1,30 @@
 package dev.doublekekse.festlyutils.packet;
 
 import dev.doublekekse.festlyutils.FestlyUtils;
-import net.fabricmc.fabric.api.networking.v1.FabricPacket;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.fabricmc.fabric.api.networking.v1.PacketType;
-import net.minecraft.client.player.LocalPlayer;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import org.jetbrains.annotations.NotNull;
 
-public record CameraFovPacket(float fov) implements FabricPacket {
-    public static final PacketType<CameraFovPacket> TYPE = PacketType.create(new ResourceLocation(FestlyUtils.MOD_ID, "camera_fov_packet"), (buf -> new CameraFovPacket(buf.readFloat())));
+public record CameraFovPacket(float fov) implements CustomPacketPayload {
+    public static final StreamCodec<FriendlyByteBuf, CameraFovPacket> STREAM_CODEC = CustomPacketPayload.codec(CameraFovPacket::write, CameraFovPacket::new);
+    public static final CustomPacketPayload.Type<CameraFovPacket> TYPE = new CustomPacketPayload.Type<>(FestlyUtils.identifier("camera_fov_packet"));
+
+    CameraFovPacket(FriendlyByteBuf buf) {
+        this(buf.readFloat());
+    }
 
     @Override
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
+
     public void write(FriendlyByteBuf buf) {
         buf.writeFloat(fov);
     }
 
-    @Override
-    public PacketType<?> getType() {
-        return TYPE;
-    }
-
-    public static void handle(CameraFovPacket packet, LocalPlayer player, PacketSender sender) {
-        player.festlyUtils$setFov(packet.fov);
+    public static void handle(CameraFovPacket packet, ClientPlayNetworking.Context context) {
+        context.player().festlyUtils$setFov(packet.fov);
     }
 }

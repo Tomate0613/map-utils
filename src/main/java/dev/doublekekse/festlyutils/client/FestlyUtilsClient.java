@@ -12,7 +12,6 @@ public class FestlyUtilsClient implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(CameraSplinePacket.TYPE, CameraSplinePacket::handle);
         ClientPlayNetworking.registerGlobalReceiver(CameraOverlayPacket.TYPE, CameraOverlayPacket::handle);
         ClientPlayNetworking.registerGlobalReceiver(CameraFovPacket.TYPE, CameraFovPacket::handle);
-
         ClientPlayNetworking.registerGlobalReceiver(ClickEventPacket.TYPE, ClickEventPacket::handle);
     }
 }

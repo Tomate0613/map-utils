@@ -1,6 +1,7 @@
 package dev.doublekekse.festlyutils.data;
 
 import dev.doublekekse.festlyutils.FestlyUtils;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.server.MinecraftServer;
@@ -32,12 +33,12 @@ public class FestlyUtilsSavedData extends SavedData {
     }
 
     @Override
-    public @NotNull CompoundTag save(CompoundTag compoundTag) {
+    public @NotNull CompoundTag save(CompoundTag compoundTag, HolderLookup.Provider provider) {
         compoundTag.put("inventories", inventories);
         return compoundTag;
     }
 
-    public static FestlyUtilsSavedData load(CompoundTag compoundTag) {
+    public static FestlyUtilsSavedData load(CompoundTag compoundTag, HolderLookup.Provider provider) {
         var data = new FestlyUtilsSavedData();
 
         data.inventories = compoundTag.getCompound("inventories");

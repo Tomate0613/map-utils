@@ -1,6 +1,7 @@
 package dev.doublekekse.festlyutils.mixin;
 
 import dev.doublekekse.festlyutils.duck.GuiDuck;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
@@ -24,8 +25,8 @@ public abstract class GuiMixin implements GuiDuck {
     @Unique
     float overlayOpacity;
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;getDeltaFrameTime()F", ordinal = 0))
-    void render(GuiGraphics guiGraphics, float f, CallbackInfo ci) {
+    @Inject(method = "renderCameraOverlays", at = @At("HEAD"))
+    void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
         if (overlayLocation == null) {
             return;
         }

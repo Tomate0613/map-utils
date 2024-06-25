@@ -5,7 +5,6 @@ import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -38,10 +37,11 @@ public class CommandCallback implements TimerCallback<MinecraftServer> {
         String name = entity == null ? "CommandCallback" : entity.getName().getString() + " (CommandCallback)";
         Component nameComponent = Component.literal(name);
 
-        entityNameComponent: if(entity != null) {
+        entityNameComponent:
+        if (entity != null) {
             var displayName = entity.getDisplayName();
 
-            if(displayName == null)
+            if (displayName == null)
                 break entityNameComponent;
 
             displayName.copy().append(" (CommandCallback)");
@@ -53,7 +53,7 @@ public class CommandCallback implements TimerCallback<MinecraftServer> {
 
     public static class Serializer extends TimerCallback.Serializer<MinecraftServer, CommandCallback> {
         public Serializer() {
-            super(new ResourceLocation(FestlyUtils.MOD_ID, "command"), CommandCallback.class);
+            super(FestlyUtils.identifier("command"), CommandCallback.class);
         }
 
         public void serialize(CompoundTag compoundTag, CommandCallback commandCallback) {

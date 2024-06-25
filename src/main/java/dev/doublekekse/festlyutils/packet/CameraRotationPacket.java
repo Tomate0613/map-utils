@@ -1,19 +1,28 @@
 package dev.doublekekse.festlyutils.packet;
 
 import dev.doublekekse.festlyutils.FestlyUtils;
-import net.fabricmc.fabric.api.networking.v1.FabricPacket;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.fabricmc.fabric.api.networking.v1.PacketType;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.phys.Vec2;
+import org.jetbrains.annotations.NotNull;
 
-public record CameraRotationPacket(Vec2 rotation) implements FabricPacket {
-    public static final PacketType<CameraRotationPacket> TYPE = PacketType.create(new ResourceLocation(FestlyUtils.MOD_ID, "camera_rotation_packet"), (buf -> new CameraRotationPacket(buf.readNullable((b) -> new Vec2(b.readFloat(), b.readFloat())))));
+public record CameraRotationPacket(Vec2 rotation) implements CustomPacketPayload {
+    public static final StreamCodec<FriendlyByteBuf, CameraRotationPacket> STREAM_CODEC = CustomPacketPayload.codec(CameraRotationPacket::write, CameraRotationPacket::new);
+    public static final CustomPacketPayload.Type<CameraRotationPacket> TYPE = new CustomPacketPayload.Type<>(FestlyUtils.identifier("camera_rotation_packet"));
+
+    CameraRotationPacket(FriendlyByteBuf buf) {
+        // TODO No cast wtf
+        this((Vec2) buf.readNullable((b) -> new Vec2(b.readFloat(), b.readFloat())));
+    }
 
     @Override
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
+
     public void write(FriendlyByteBuf buf) {
         buf.writeNullable(rotation, (b, rot) -> {
             b.writeFloat(rot.x);
@@ -21,12 +30,7 @@ public record CameraRotationPacket(Vec2 rotation) implements FabricPacket {
         });
     }
 
-    @Override
-    public PacketType<?> getType() {
-        return TYPE;
-    }
-
-    public static void handle(CameraRotationPacket packet, LocalPlayer player, PacketSender sender) {
+    public static void handle(CameraRotationPacket packet, ClientPlayNetworking.Context context) {
         var client = Minecraft.getInstance();
         var camera = client.gameRenderer.getMainCamera();
 
