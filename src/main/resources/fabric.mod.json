@@ -1,47 +1,28 @@
 {
   "schemaVersion": 1,
-  "id": "festly-utils",
+  "id": "map-utils",
   "version": "${version}",
-  "name": "Festly Utils",
+  "name": "Map Utils",
   "description": "",
   "authors": [],
   "contact": {},
   "license": "MIT",
-  "icon": "assets/festly-utils/icon.png",
+  "icon": "assets/map_utils/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "dev.doublekekse.festlyutils.FestlyUtils"
+      "dev.doublekekse.map_utils.MapUtils"
     ],
     "client": [
-      "dev.doublekekse.festlyutils.client.FestlyUtilsClient"
+      "dev.doublekekse.map_utils.client.MapUtilsClient"
     ]
   },
   "mixins": [
-    "festly-utils.mixins.json"
+    "map-utils.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
     "minecraft": "${minecraft_version}"
-  },
-  "custom": {
-    "loom:injected_interfaces": {
-      "net/minecraft/client/player/AbstractClientPlayer": [
-        "dev/doublekekse/festlyutils/duck/AbstractClientPlayerDuck"
-      ],
-      "net/minecraft/client/Camera": [
-        "dev/doublekekse/festlyutils/duck/CameraDuck"
-      ],
-      "net/minecraft/commands/CommandSourceStack": [
-        "dev/doublekekse/festlyutils/duck/CommandSourceStackDuck"
-      ],
-      "net/minecraft/commands/arguments/selector/EntitySelector": [
-        "dev/doublekekse/festlyutils/duck/EntitySelectorDuck"
-      ],
-      "net/minecraft/client/gui/Gui": [
-        "dev/doublekekse/festlyutils/duck/GuiDuck"
-      ]
-    }
   }
 }

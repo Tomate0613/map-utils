@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "power=0": { "model": "map_utils:block/variable_redstone_block_off" },
+    "power=1": { "model": "map_utils:block/variable_redstone_block" },
+    "power=2": { "model": "map_utils:block/variable_redstone_block" },
+    "power=3": { "model": "map_utils:block/variable_redstone_block" },
+    "power=4": { "model": "map_utils:block/variable_redstone_block" },
+    "power=5": { "model": "map_utils:block/variable_redstone_block" },
+    "power=6": { "model": "map_utils:block/variable_redstone_block" },
+    "power=7": { "model": "map_utils:block/variable_redstone_block" },
+    "power=8": { "model": "map_utils:block/variable_redstone_block" },
+    "power=9": { "model": "map_utils:block/variable_redstone_block" },
+    "power=10": { "model": "map_utils:block/variable_redstone_block" },
+    "power=11": { "model": "map_utils:block/variable_redstone_block" },
+    "power=12": { "model": "map_utils:block/variable_redstone_block" },
+    "power=13": { "model": "map_utils:block/variable_redstone_block" },
+    "power=14": { "model": "map_utils:block/variable_redstone_block" },
+    "power=15": { "model": "map_utils:block/variable_redstone_block" }
+  }
+}
+
