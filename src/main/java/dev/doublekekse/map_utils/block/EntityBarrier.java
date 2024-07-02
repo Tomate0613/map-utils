@@ -9,7 +9,6 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -35,12 +34,12 @@ public class EntityBarrier extends Block {
     }
 
     @Override
-    protected RenderShape getRenderShape(BlockState blockState) {
+    protected @NotNull RenderShape getRenderShape(BlockState blockState) {
         return RenderShape.INVISIBLE;
     }
 
     @Override
-    protected VoxelShape getCollisionShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
+    protected @NotNull VoxelShape getCollisionShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
         if(collisionContext instanceof EntityCollisionContext entityCollisionContext) {
             var mode = blockState.getValue(WHITELIST_MODE);
             var entity = entityCollisionContext.getEntity();
