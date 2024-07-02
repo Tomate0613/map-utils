@@ -3,7 +3,7 @@
   "id": "map-utils",
   "version": "${version}",
   "name": "Map Utils",
-  "description": "",
+  "description": "Collection of blocks and commands for modded maps",
   "authors": [],
   "contact": {},
   "license": "MIT",
