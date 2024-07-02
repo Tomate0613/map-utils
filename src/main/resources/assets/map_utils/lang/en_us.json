@@ -1,5 +1,6 @@
 {
   "block.map_utils.variable_redstone_block": "Variable Redstone Block",
+  "block.map_utils.entity_barrier": "Entity Barrier",
 
 
   "argument.map_utils.path.incomplete": "Expected rotation after position",

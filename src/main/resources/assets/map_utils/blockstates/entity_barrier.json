@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "map_utils:block/entity_barrier"
+    }
+  }
+}
