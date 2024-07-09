@@ -1,8 +1,6 @@
 package dev.doublekekse.map_utils.packet;
 
 import dev.doublekekse.map_utils.MapUtils;
-import dev.doublekekse.map_utils.state.CameraOverrideState;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -26,10 +24,5 @@ public record CameraOverlayPacket(ResourceLocation overlayLocation,
     public void write(FriendlyByteBuf buf) {
         buf.writeNullable(overlayLocation, FriendlyByteBuf::writeResourceLocation);
         buf.writeFloat(overlayOpacity);
-    }
-
-    public static void handle(CameraOverlayPacket packet, ClientPlayNetworking.Context context) {
-        CameraOverrideState.overlayLocation = packet.overlayLocation;
-        CameraOverrideState.overlayOpacity = packet.overlayOpacity;
     }
 }

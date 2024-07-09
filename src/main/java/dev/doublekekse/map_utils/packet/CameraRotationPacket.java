@@ -1,8 +1,6 @@
 package dev.doublekekse.map_utils.packet;
 
 import dev.doublekekse.map_utils.MapUtils;
-import dev.doublekekse.map_utils.state.CameraOverrideState;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -28,10 +26,5 @@ public record CameraRotationPacket(Vec2 rotation, boolean interpolate) implement
             b.writeFloat(rot.y);
         });
         buf.writeBoolean(interpolate);
-    }
-
-    public static void handle(CameraRotationPacket packet, ClientPlayNetworking.Context context) {
-        CameraOverrideState.rotation = packet.rotation;
-        CameraOverrideState.interpolateRotation = packet.interpolate;
     }
 }

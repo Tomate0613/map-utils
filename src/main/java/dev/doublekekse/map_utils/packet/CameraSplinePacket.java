@@ -2,8 +2,6 @@ package dev.doublekekse.map_utils.packet;
 
 import dev.doublekekse.map_utils.MapUtils;
 import dev.doublekekse.map_utils.curve.PositionAndRotation;
-import dev.doublekekse.map_utils.state.CameraOverrideState;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -46,16 +44,5 @@ public record CameraSplinePacket(PositionAndRotation[] path, int splineDuration)
         }
 
         buf.writeInt(splineDuration);
-    }
-
-    public static void handle(CameraSplinePacket packet, ClientPlayNetworking.Context context) {
-        CameraOverrideState.spline = packet.path;
-        CameraOverrideState.splineDuration = packet.splineDuration;
-
-        CameraOverrideState.fov = 1;
-        CameraOverrideState.interpolatePosition = false;
-        CameraOverrideState.interpolateRotation = false;
-
-        CameraOverrideState.splineTicks = 0;
     }
 }
