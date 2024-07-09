@@ -27,6 +27,7 @@ public class EntityBarrier extends Block {
             return this.name().toLowerCase();
         }
     }
+
     public static final EnumProperty<WhitelistMode> WHITELIST_MODE = EnumProperty.create("whitelist_mode", WhitelistMode.class);
 
     public EntityBarrier(Properties properties) {
@@ -40,11 +41,11 @@ public class EntityBarrier extends Block {
 
     @Override
     protected @NotNull VoxelShape getCollisionShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
-        if(collisionContext instanceof EntityCollisionContext entityCollisionContext) {
+        if (collisionContext instanceof EntityCollisionContext entityCollisionContext) {
             var mode = blockState.getValue(WHITELIST_MODE);
             var entity = entityCollisionContext.getEntity();
 
-            if(entity == null) {
+            if (entity == null) {
                 return Shapes.empty();
             }
 
@@ -61,9 +62,13 @@ public class EntityBarrier extends Block {
             }
 
             return Shapes.block();
-        }else {
+        } else {
             return Shapes.empty();
         }
+    }
+
+    protected boolean propagatesSkylightDown(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos) {
+        return true;
     }
 
     @Override
