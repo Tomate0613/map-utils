@@ -95,11 +95,9 @@ public abstract class CameraMixin {
         }
 
         var progress = (CameraOverrideState.splineTicks + timeSinceLastTick) / CameraOverrideState.splineDuration;
-        System.out.println((CameraOverrideState.splineTicks / (float)CameraOverrideState.splineDuration));
 
         if (progress > 1) {
             stopPath();
-            System.out.println("STOP");
             return;
         }
 
