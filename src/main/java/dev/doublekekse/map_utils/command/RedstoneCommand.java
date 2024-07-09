@@ -39,7 +39,7 @@ public class RedstoneCommand {
                     source.sendSuccess(() -> Component.translatable("commands.redstone.timed", blockPos.getX(), blockPos.getY(), blockPos.getZ(), power, timeOffset), true);
 
                     return 1;
-                })).then(literal("infinite").executes((context -> {
+                })).executes((context -> {
                     var source = context.getSource();
                     var level = source.getLevel();
                     var blockPos = BlockPosArgument.getBlockPos(context, "blockPos");
@@ -54,7 +54,7 @@ public class RedstoneCommand {
                     source.sendSuccess(() -> Component.translatable("commands.redstone.infinite", blockPos.getX(), blockPos.getY(), blockPos.getZ(), power), true);
                     return 1;
                 }
-                )))))
+                ))))
         );
     }
 }
