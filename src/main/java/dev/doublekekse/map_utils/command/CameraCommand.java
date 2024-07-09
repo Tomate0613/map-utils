@@ -9,6 +9,7 @@ import dev.doublekekse.map_utils.command.argument.PathArgumentType;
 import dev.doublekekse.map_utils.packet.*;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.TimeArgument;
 import net.minecraft.commands.arguments.coordinates.RotationArgument;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.network.chat.Component;
@@ -135,7 +136,7 @@ public class CameraCommand {
                         context.getSource().sendSuccess(() -> Component.translatable("commands.map_utils.camera.path.reset"), false);
 
                         return 1;
-                    })).then(literal("set").then(argument("duration", IntegerArgumentType.integer(1)).then(argument("path", PathArgumentType.path()).executes(context -> {
+                    })).then(literal("set").then(argument("duration", TimeArgument.time(1)).then(argument("path", PathArgumentType.path()).executes(context -> {
                         var path = PathArgumentType.getPath(context, "path");
                         var duration = IntegerArgumentType.getInteger(context, "duration");
 
