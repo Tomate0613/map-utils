@@ -38,6 +38,7 @@
 
 
   "gui.map_utils.copy.confirm": "Do you want to copy this to your clipboard?",
+  "gui.map_utils.suggest_command.confirm": "Do you want to edit or run this command?",
 
 
   "commands.clickevent.success": "Sent clickevent"
