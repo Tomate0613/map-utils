@@ -1,6 +1,8 @@
 package dev.doublekekse.map_utils.timer;
 
 import dev.doublekekse.map_utils.MapUtils;
+import dev.doublekekse.map_utils.compat.player_roles.PlayerRoleCompatibility;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.nbt.CompoundTag;
@@ -48,7 +50,13 @@ public class CommandCallback implements TimerCallback<MinecraftServer> {
         }
 
         // TODO
-        return new CommandSourceStack(CommandSource.NULL, position, rotation, level, permissionLevel, name, nameComponent, level.getServer(), entity);
+        var stack = new CommandSourceStack(CommandSource.NULL, position, rotation, level, permissionLevel, name, nameComponent, level.getServer(), entity);
+
+        if(FabricLoader.getInstance().isModLoaded("player_roles")) {
+            PlayerRoleCompatibility.applyCommandIdentityType(stack);
+        }
+
+        return stack;
     }
 
     public static class Serializer extends TimerCallback.Serializer<MinecraftServer, CommandCallback> {
