@@ -62,8 +62,11 @@ public class MapUtils implements ModInitializer {
                 InventoryCommand.register(dispatcher);
                 CameraCommand.register(dispatcher);
                 RedstoneCommand.register(dispatcher);
+                PathCommand.register(dispatcher);
             }
         );
+
+        PathCommand.registerTickListener();
 
         PayloadTypeRegistry.playS2C().register(CameraFovPacket.TYPE, CameraFovPacket.STREAM_CODEC);
         PayloadTypeRegistry.playS2C().register(CameraOverlayPacket.TYPE, CameraOverlayPacket.STREAM_CODEC);
