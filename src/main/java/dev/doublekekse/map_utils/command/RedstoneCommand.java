@@ -18,7 +18,7 @@ public class RedstoneCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
             literal("redstone").requires(source -> source.hasPermission(2))
-                .then(argument("blockPos", BlockPosArgument.blockPos()).then(argument("power", IntegerArgumentType.integer(0, 15)).then(argument("time", TimeArgument.time()).executes(context -> {
+                .then(argument("blockPos", BlockPosArgument.blockPos()).then(argument("power", IntegerArgumentType.integer(0, 15)).then(argument("time", TimeArgument.time(1)).executes(context -> {
                     var source = context.getSource();
                     var level = source.getLevel();
                     var blockPos = BlockPosArgument.getBlockPos(context, "blockPos");
