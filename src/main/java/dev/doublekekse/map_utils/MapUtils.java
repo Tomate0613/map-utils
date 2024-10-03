@@ -37,7 +37,7 @@ public class MapUtils implements ModInitializer {
     public static final BlockItem VARIABLE_REDSTONE_BLOCK_ITEM = new BlockItem(VARIABLE_REDSTONE_BLOCK, new Item.Properties());
     public static final EntityBarrier ENTITY_BARRIER_BLOCK = new EntityBarrier(BlockBehaviour.Properties.of().strength(-1.0F, 3600000.8F).mapColor(MapColor.NONE).noLootTable().noOcclusion().isValidSpawn(Blocks::never).noTerrainParticles().pushReaction(PushReaction.BLOCK));
     public static final BlockItem ENTITY_BARRIER_BLOCK_ITEM = new BlockItem(ENTITY_BARRIER_BLOCK, new Item.Properties());
-    public static final TimerBlock TIMER_BLOCK = new TimerBlock(BlockBehaviour.Properties.of());
+    public static final TimerBlock TIMER_BLOCK = new TimerBlock(BlockBehaviour.Properties.of().sound(SoundType.COPPER_BULB));
     public static final BlockItem TIMER_BLOCK_ITEM = new BlockItem(TIMER_BLOCK, new Item.Properties());
     public static final BlockEntityType<TimerBlockEntity> TIMER_BLOCK_ENTITY = Registry.register(
         BuiltInRegistries.BLOCK_ENTITY_TYPE,
