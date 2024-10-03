@@ -1,6 +1,8 @@
 package dev.doublekekse.map_utils;
 
 import dev.doublekekse.map_utils.block.EntityBarrier;
+import dev.doublekekse.map_utils.block.timer.TimerBlock;
+import dev.doublekekse.map_utils.block.timer.TimerBlockEntity;
 import dev.doublekekse.map_utils.command.*;
 import dev.doublekekse.map_utils.command.argument.PathArgumentType;
 import dev.doublekekse.map_utils.block.VariableRedstoneBlock;
@@ -12,6 +14,7 @@ import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -21,6 +24,7 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
@@ -33,6 +37,13 @@ public class MapUtils implements ModInitializer {
     public static final BlockItem VARIABLE_REDSTONE_BLOCK_ITEM = new BlockItem(VARIABLE_REDSTONE_BLOCK, new Item.Properties());
     public static final EntityBarrier ENTITY_BARRIER_BLOCK = new EntityBarrier(BlockBehaviour.Properties.of().strength(-1.0F, 3600000.8F).mapColor(MapColor.NONE).noLootTable().noOcclusion().isValidSpawn(Blocks::never).noTerrainParticles().pushReaction(PushReaction.BLOCK));
     public static final BlockItem ENTITY_BARRIER_BLOCK_ITEM = new BlockItem(ENTITY_BARRIER_BLOCK, new Item.Properties());
+    public static final TimerBlock TIMER_BLOCK = new TimerBlock(BlockBehaviour.Properties.of());
+    public static final BlockItem TIMER_BLOCK_ITEM = new BlockItem(TIMER_BLOCK, new Item.Properties());
+    public static final BlockEntityType<TimerBlockEntity> TIMER_BLOCK_ENTITY = Registry.register(
+        BuiltInRegistries.BLOCK_ENTITY_TYPE,
+        identifier("timer_block"),
+        BlockEntityType.Builder.of(TimerBlockEntity::new, TIMER_BLOCK).build()
+    );
 
     @Override
     public void onInitialize() {
@@ -46,12 +57,17 @@ public class MapUtils implements ModInitializer {
         Registry.register(BuiltInRegistries.BLOCK, identifier("entity_barrier"), ENTITY_BARRIER_BLOCK);
         Registry.register(BuiltInRegistries.ITEM, identifier("entity_barrier"), ENTITY_BARRIER_BLOCK_ITEM);
 
+        Registry.register(BuiltInRegistries.BLOCK, identifier("timer_block"), TIMER_BLOCK);
+        Registry.register(BuiltInRegistries.ITEM, identifier("timer_block"), TIMER_BLOCK_ITEM);
+
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.REDSTONE_BLOCKS).register(content -> {
             content.accept(VARIABLE_REDSTONE_BLOCK_ITEM);
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.OP_BLOCKS).register(content -> {
             content.accept(ENTITY_BARRIER_BLOCK_ITEM);
+            content.accept(VARIABLE_REDSTONE_BLOCK_ITEM);
+            content.accept(TIMER_BLOCK);
         });
 
 
@@ -74,6 +90,9 @@ public class MapUtils implements ModInitializer {
         PayloadTypeRegistry.playS2C().register(CameraRotationPacket.TYPE, CameraRotationPacket.STREAM_CODEC);
         PayloadTypeRegistry.playS2C().register(CameraSplinePacket.TYPE, CameraSplinePacket.STREAM_CODEC);
         PayloadTypeRegistry.playS2C().register(ClickEventPacket.TYPE, ClickEventPacket.STREAM_CODEC);
+
+        PayloadTypeRegistry.playC2S().register(SetTimerBlockPacket.TYPE, SetTimerBlockPacket.STREAM_CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(SetTimerBlockPacket.TYPE, SetTimerBlockPacket::handle);
 
         ArgumentTypeRegistry.registerArgumentType(identifier("path"), PathArgumentType.class, SingletonArgumentInfo.contextFree(PathArgumentType::path));
     }

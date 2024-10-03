@@ -1,45 +1,38 @@
 {
   "block.map_utils.variable_redstone_block": "Variable Redstone Block",
   "block.map_utils.entity_barrier": "Entity Barrier",
-
-
+  "block.map_utils.timer_block": "Redstone Timer",
   "argument.map_utils.path.incomplete": "Expected rotation after position",
   "argument.map_utils.path.not_enough_nodes": "Not enough nodes. A minimum of four is required",
   "argument.map_utils.path.no_semicolon": "Expected ';'",
-
-
   "commands.map_utils.inventory.saved": "Saved inventory '%s'",
   "commands.map_utils.inventory.loaded": "Loaded inventory '%s'",
   "commands.map_utils.inventory.missing": "Could not find inventory '%s'",
-
   "commands.map_utils.camera.fov.reset": "Reset camera fov",
   "commands.map_utils.camera.overlay.reset": "Reset camera overlay",
   "commands.map_utils.camera.position.reset": "Reset camera position",
   "commands.map_utils.camera.rotation.reset": "Reset camera rotation",
   "commands.map_utils.camera.path.reset": "Reset camera path",
-
   "commands.map_utils.camera.reset_all": "Reset all camera properties",
-
   "commands.map_utils.camera.fov.set": "Set camera fov to %s",
   "commands.map_utils.camera.overlay.set": "Set camera overlay to %s with opacity %s",
   "commands.map_utils.camera.position.set": "Set camera position to %s %s %s",
   "commands.map_utils.camera.rotation.set": "Set camera rotation to %s %s",
   "commands.map_utils.camera.path.set": "Set camera path (%s nodes, speed = %s)",
-
   "commands.map_utils.camera.no_player": "Not a player source",
-
-
   "commands.map_utils.schedule.created.command": "Scheduled command '%s' in %s ticks at gametime %s",
-
-
   "commands.redstone.failed": "Block at %s %s %s is not a variable redstone block",
   "commands.redstone.timed": "Powered block at %s %s %s with power %s for %s",
   "commands.redstone.infinite": "Powered block at %s %s %s with power %s",
-
-
   "gui.map_utils.copy.confirm": "Do you want to copy this to your clipboard?",
   "gui.map_utils.suggest_command.confirm": "Do you want to edit or run this command?",
-
-
+  "gui.map_utils.screen.timer_edit": "Edit Timer",
+  "gui.map_utils.timer.duration": "Duration",
+  "gui.map_utils.timer.duration.label": "Duration:",
+  "gui.map_utils.timer.interval": "Interval",
+  "gui.map_utils.timer.interval.label": "Interval:",
+  "gui.map_utils.timer.tick_unloaded": "Tick Unloaded",
+  "gui.map_utils.timer.tick_unloaded.label": "Tick Unloaded:",
+  "gui.map_utils.timer.tick_unloaded.tooltip": "Tick Unloaded\nCompensates for missed ticks when the block gets loaded again by triggering once.\n\nThis does not affect performance",
   "commands.clickevent.success": "Sent clickevent"
 }

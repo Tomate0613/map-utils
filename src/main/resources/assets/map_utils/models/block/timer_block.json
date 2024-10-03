@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "map_utils:block/timer_block_side",
+    "top": "map_utils:block/timer_block_top",
+    "bottom": "map_utils:block/timer_block_bottom"
+  }
+}
+

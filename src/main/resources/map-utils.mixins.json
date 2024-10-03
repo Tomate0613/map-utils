@@ -4,15 +4,17 @@
   "package": "dev.doublekekse.map_utils.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "EntitySelectorParserMixin",
     "CommandSourceStackMixin",
     "EntitySelectorMixin",
-    "ExecuteCommandMixin"
+    "EntitySelectorParserMixin",
+    "ExecuteCommandMixin",
+    "PlayerMixin"
   ],
   "client": [
     "AbstractClientPlayerMixin",
-    "GuiMixin",
     "CameraMixin",
+    "GuiMixin",
+    "LocalPlayerMixin",
     "MinecraftMixin"
   ],
   "injectors": {
