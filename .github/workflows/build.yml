@@ -6,7 +6,7 @@ jobs:
     strategy:
       matrix:
         java: [
-          17,
+          21,
         ]
         os: [ ubuntu-22.04, windows-2022 ]
     runs-on: ${{ matrix.os }}
@@ -27,7 +27,7 @@ jobs:
         run: |
           ./gradlew build
       - name: capture build artifacts
-        if: ${{ runner.os == 'Linux' && matrix.java == '17' }}
+        if: ${{ runner.os == 'Linux' }}
         uses: actions/upload-artifact@v3
         with:
           name: Artifacts
