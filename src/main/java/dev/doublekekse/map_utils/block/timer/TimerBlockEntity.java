@@ -98,7 +98,13 @@ public class TimerBlockEntity extends BlockEntity {
 
     @Override
     public @NotNull CompoundTag getUpdateTag(HolderLookup.Provider provider) {
-        return this.saveCustomOnly(provider);
+        CompoundTag compoundTag = new CompoundTag();
+
+        compoundTag.putInt("interval", interval);
+        compoundTag.putInt("duration", duration);
+        compoundTag.putBoolean("tick_unloaded", tickUnloaded);
+
+        return compoundTag;
     }
 
     public int getOutputSignal() {
