@@ -15,8 +15,7 @@
     "CameraMixin",
     "GuiMixin",
     "LocalPlayerMixin",
-    "MinecraftMixin",
-    "MouseHandlerMixin"
+    "MinecraftMixin"
   ],
   "injectors": {
     "defaultRequire": 1
