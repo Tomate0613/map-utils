@@ -1,6 +1,6 @@
 package dev.doublekekse.map_utils.mixin;
 
-import dev.doublekekse.map_utils.curve.SplineInterpolation;
+import dev.doublekekse.map_utils.curve.SplinePath;
 import dev.doublekekse.map_utils.state.CameraOverrideState;
 import net.minecraft.client.Camera;
 import net.minecraft.world.entity.Entity;
@@ -65,7 +65,7 @@ public abstract class CameraMixin {
         this.setRotation(overrideRotation.x, overrideRotation.y);
 
         if (CameraOverrideState.interpolateRotation) {
-            var newRotation = SplineInterpolation.lerpRotation(oldCameraRotation, overrideRotation, timeSinceLastTick);
+            var newRotation = SplinePath.lerpRotation(oldCameraRotation, overrideRotation, timeSinceLastTick);
             setRotation(newRotation.x, newRotation.y);
         } else {
             setRotation(overrideRotation.x, overrideRotation.y);
@@ -101,10 +101,8 @@ public abstract class CameraMixin {
             return;
         }
 
-        var positionAndRotation = SplineInterpolation.generateSmoothPath(CameraOverrideState.spline, progress);
-
-        overridePosition = positionAndRotation.position();
-        overrideRotation = positionAndRotation.rotation();
+        overridePosition = CameraOverrideState.spline.getPosition(progress);
+        overrideRotation = CameraOverrideState.spline.getRotation(progress);
     }
 
     @Unique

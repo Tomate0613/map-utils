@@ -1,6 +1,6 @@
 package dev.doublekekse.map_utils.state;
 
-import dev.doublekekse.map_utils.curve.PositionAndRotation;
+import dev.doublekekse.map_utils.curve.SplinePath;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
@@ -14,7 +14,7 @@ public class CameraOverrideState {
     public static boolean interpolatePosition;
     public static boolean interpolateRotation;
 
-    public static PositionAndRotation[] spline;
+    public static SplinePath spline;
     public static int splineDuration;
     public static int splineTicks;
 

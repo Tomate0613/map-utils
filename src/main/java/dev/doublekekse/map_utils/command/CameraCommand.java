@@ -138,15 +138,21 @@ public class CameraCommand {
                         return 1;
                     })).then(literal("set").then(argument("duration", TimeArgument.time(1)).then(argument("path", PathArgumentType.path()).executes(context -> {
                         var path = PathArgumentType.getPath(context, "path");
+                        var pathId = PathArgumentType.getPathId(context, "path");
                         var duration = IntegerArgumentType.getInteger(context, "duration");
+
+                        if (path == null) {
+                            context.getSource().sendFailure(Component.translatable("commands.map_utils.path.not_found"));
+                            return -1;
+                        }
 
                         if (context.getSource().getPlayer() == null) {
                             context.getSource().sendFailure(Component.translatable("commands.map_utils.camera.no_player"));
                             return -1;
                         }
 
-                        ServerPlayNetworking.send(context.getSource().getPlayer(), new CameraSplinePacket(path, duration));
-                        context.getSource().sendSuccess(() -> Component.translatable("commands.map_utils.camera.path.set", path.length, duration), false);
+                        ServerPlayNetworking.send(context.getSource().getPlayer(), new CameraSplinePacket(pathId, duration));
+                        context.getSource().sendSuccess(() -> Component.translatable("commands.map_utils.camera.path.set", path.size(), duration), false);
 
                         return 1;
                     }))))

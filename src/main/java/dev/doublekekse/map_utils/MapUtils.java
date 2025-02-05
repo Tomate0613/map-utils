@@ -6,6 +6,7 @@ import dev.doublekekse.map_utils.block.timer.TimerBlockEntity;
 import dev.doublekekse.map_utils.command.*;
 import dev.doublekekse.map_utils.command.argument.PathArgumentType;
 import dev.doublekekse.map_utils.block.VariableRedstoneBlock;
+import dev.doublekekse.map_utils.data.MapUtilsSavedData;
 import dev.doublekekse.map_utils.packet.*;
 import dev.doublekekse.map_utils.state.CameraOverrideState;
 import dev.doublekekse.map_utils.timer.CommandCallback;
@@ -13,12 +14,16 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.SharedConstants;
 import net.minecraft.commands.synchronization.SingletonArgumentInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
@@ -45,8 +50,23 @@ public class MapUtils implements ModInitializer {
         BlockEntityType.Builder.of(TimerBlockEntity::new, TIMER_BLOCK).build()
     );
 
+    public static void invalidateData(MinecraftServer server) {
+        var savedData = MapUtilsSavedData.getServerData(server);
+        savedData.setDirty();
+
+        for (var player : server.getPlayerList().getPlayers()) {
+            ServerPlayNetworking.send(player, new ClientboundSyncDataPacket(savedData));
+        }
+    }
+
+    public static void syncData(PacketSender packetSender, MinecraftServer server) {
+        var savedData = MapUtilsSavedData.getServerData(server);
+        packetSender.sendPacket(new ClientboundSyncDataPacket(savedData));
+    }
+
     @Override
     public void onInitialize() {
+        SharedConstants.IS_RUNNING_IN_IDE = true;
         CameraOverrideState.reset();
 
         TimerCallbacks.SERVER_CALLBACKS.register(new CommandCallback.Serializer());
@@ -90,11 +110,19 @@ public class MapUtils implements ModInitializer {
         PayloadTypeRegistry.playS2C().register(CameraRotationPacket.TYPE, CameraRotationPacket.STREAM_CODEC);
         PayloadTypeRegistry.playS2C().register(CameraSplinePacket.TYPE, CameraSplinePacket.STREAM_CODEC);
         PayloadTypeRegistry.playS2C().register(ClickEventPacket.TYPE, ClickEventPacket.STREAM_CODEC);
+        PayloadTypeRegistry.playS2C().register(ClientboundSyncDataPacket.TYPE, ClientboundSyncDataPacket.STREAM_CODEC);
 
         PayloadTypeRegistry.playC2S().register(SetTimerBlockPacket.TYPE, SetTimerBlockPacket.STREAM_CODEC);
+        PayloadTypeRegistry.playC2S().register(SavePathPacket.TYPE, SavePathPacket.STREAM_CODEC);
+        PayloadTypeRegistry.playC2S().register(ServerboundModifyControlPointPacket.TYPE, ServerboundModifyControlPointPacket.STREAM_CODEC);
+
         ServerPlayNetworking.registerGlobalReceiver(SetTimerBlockPacket.TYPE, SetTimerBlockPacket::handle);
+        ServerPlayNetworking.registerGlobalReceiver(SavePathPacket.TYPE, SavePathPacket::handle);
+        ServerPlayNetworking.registerGlobalReceiver(ServerboundModifyControlPointPacket.TYPE, ServerboundModifyControlPointPacket::handle);
 
         ArgumentTypeRegistry.registerArgumentType(identifier("path"), PathArgumentType.class, SingletonArgumentInfo.contextFree(PathArgumentType::path));
+
+        ServerPlayConnectionEvents.JOIN.register((listener, packetSender, server) -> syncData(packetSender, server));
     }
 
     public static ResourceLocation identifier(String path) {

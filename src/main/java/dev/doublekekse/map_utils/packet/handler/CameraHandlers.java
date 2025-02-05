@@ -1,5 +1,6 @@
 package dev.doublekekse.map_utils.packet.handler;
 
+import dev.doublekekse.map_utils.client.MapUtilsClient;
 import dev.doublekekse.map_utils.packet.*;
 import dev.doublekekse.map_utils.state.CameraOverrideState;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -21,7 +22,7 @@ public class CameraHandlers {
     }
 
     public static void handleSpline(CameraSplinePacket packet, ClientPlayNetworking.Context context) {
-        CameraOverrideState.spline = packet.path();
+        CameraOverrideState.spline = MapUtilsClient.clientSavedData.paths.get(packet.path());
         CameraOverrideState.splineDuration = packet.splineDuration();
 
         CameraOverrideState.fov = 1;
