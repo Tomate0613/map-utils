@@ -10,7 +10,7 @@ import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.phys.Vec2;
 
-import static dev.doublekekse.map_utils.MapUtils.VARIABLE_REDSTONE_BLOCK;
+import static dev.doublekekse.map_utils.registry.MapUtilsBlocks.VARIABLE_REDSTONE_BLOCK;
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 

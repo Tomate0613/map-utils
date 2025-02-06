@@ -18,6 +18,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static dev.doublekekse.map_utils.registry.MapUtilsBlockEntities.TIMER_BLOCK_ENTITY;
+
 public class TimerBlock extends BaseEntityBlock {
     public static final MapCodec<TimerBlock> CODEC = simpleCodec(TimerBlock::new);
 
@@ -44,7 +46,7 @@ public class TimerBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
-        return createTickerHelper(blockEntityType, MapUtils.TIMER_BLOCK_ENTITY, TimerBlockEntity::tick);
+        return createTickerHelper(blockEntityType, TIMER_BLOCK_ENTITY, TimerBlockEntity::tick);
     }
 
     @Override

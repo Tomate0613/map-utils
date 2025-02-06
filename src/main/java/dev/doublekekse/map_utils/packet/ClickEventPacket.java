@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 public record ClickEventPacket(ClickEvent.Action action, String value) implements CustomPacketPayload {
     public static final StreamCodec<FriendlyByteBuf, ClickEventPacket> STREAM_CODEC = CustomPacketPayload.codec(ClickEventPacket::write, ClickEventPacket::new);
-    public static final CustomPacketPayload.Type<ClickEventPacket> TYPE = new CustomPacketPayload.Type<>(MapUtils.identifier("click_event_packet"));
+    public static final CustomPacketPayload.Type<ClickEventPacket> TYPE = new CustomPacketPayload.Type<>(MapUtils.id("click_event_packet"));
 
     @Override
     public @NotNull Type<? extends CustomPacketPayload> type() {

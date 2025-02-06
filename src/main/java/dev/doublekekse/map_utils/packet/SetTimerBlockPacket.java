@@ -24,7 +24,7 @@ public record SetTimerBlockPacket(
         ByteBufCodecs.BOOL, SetTimerBlockPacket::tickUnloaded,
         SetTimerBlockPacket::new
     );
-    public static final CustomPacketPayload.Type<SetTimerBlockPacket> TYPE = new CustomPacketPayload.Type<>(MapUtils.identifier("set_timer_block_packet"));
+    public static final CustomPacketPayload.Type<SetTimerBlockPacket> TYPE = new CustomPacketPayload.Type<>(MapUtils.id("set_timer_block_packet"));
 
     @Override
     public @NotNull CustomPacketPayload.Type<? extends CustomPacketPayload> type() {

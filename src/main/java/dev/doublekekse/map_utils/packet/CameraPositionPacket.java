@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 public record CameraPositionPacket(Vec3 position, boolean interpolate) implements CustomPacketPayload {
     public static final StreamCodec<FriendlyByteBuf, CameraPositionPacket> STREAM_CODEC = CustomPacketPayload.codec(CameraPositionPacket::write, CameraPositionPacket::new);
-    public static final CustomPacketPayload.Type<CameraPositionPacket> TYPE = new CustomPacketPayload.Type<>(MapUtils.identifier("camera_position_packet"));
+    public static final CustomPacketPayload.Type<CameraPositionPacket> TYPE = new CustomPacketPayload.Type<>(MapUtils.id("camera_position_packet"));
 
     CameraPositionPacket(FriendlyByteBuf buf) {
         this(buf.readNullable(FriendlyByteBuf::readVec3), buf.readBoolean());

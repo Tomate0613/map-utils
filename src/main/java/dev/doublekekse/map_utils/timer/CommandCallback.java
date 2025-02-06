@@ -61,7 +61,7 @@ public class CommandCallback implements TimerCallback<MinecraftServer> {
 
     public static class Serializer extends TimerCallback.Serializer<MinecraftServer, CommandCallback> {
         public Serializer() {
-            super(MapUtils.identifier("command"), CommandCallback.class);
+            super(MapUtils.id("command"), CommandCallback.class);
         }
 
         public void serialize(CompoundTag compoundTag, CommandCallback commandCallback) {

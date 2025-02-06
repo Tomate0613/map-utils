@@ -21,7 +21,7 @@ public record ServerboundModifyControlPointPacket(
         SplineControlPoint.STREAM_CODEC, ServerboundModifyControlPointPacket::controlPoint,
         ServerboundModifyControlPointPacket::new
     );
-    public static final CustomPacketPayload.Type<ServerboundModifyControlPointPacket> TYPE = new CustomPacketPayload.Type<>(MapUtils.identifier("serverbound_modify_control_point_packet"));
+    public static final CustomPacketPayload.Type<ServerboundModifyControlPointPacket> TYPE = new CustomPacketPayload.Type<>(MapUtils.id("serverbound_modify_control_point_packet"));
 
     @Override
     public @NotNull CustomPacketPayload.Type<? extends CustomPacketPayload> type() {

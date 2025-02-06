@@ -15,7 +15,7 @@ import java.util.Objects;
 
 public record ClientboundSyncDataPacket(MapUtilsSavedData savedData) implements CustomPacketPayload {
     public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundSyncDataPacket> STREAM_CODEC = CustomPacketPayload.codec(ClientboundSyncDataPacket::write, ClientboundSyncDataPacket::load);
-    public static final CustomPacketPayload.Type<ClientboundSyncDataPacket> TYPE = new CustomPacketPayload.Type<>(MapUtils.identifier("clientbound_sync_data"));
+    public static final CustomPacketPayload.Type<ClientboundSyncDataPacket> TYPE = new CustomPacketPayload.Type<>(MapUtils.id("clientbound_sync_data"));
 
     private static ClientboundSyncDataPacket load(FriendlyByteBuf buf) {
         var savedData = new MapUtilsSavedData();

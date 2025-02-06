@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 public record CameraFovPacket(float fov) implements CustomPacketPayload {
     public static final StreamCodec<FriendlyByteBuf, CameraFovPacket> STREAM_CODEC = CustomPacketPayload.codec(CameraFovPacket::write, CameraFovPacket::new);
-    public static final CustomPacketPayload.Type<CameraFovPacket> TYPE = new CustomPacketPayload.Type<>(MapUtils.identifier("camera_fov_packet"));
+    public static final CustomPacketPayload.Type<CameraFovPacket> TYPE = new CustomPacketPayload.Type<>(MapUtils.id("camera_fov_packet"));
 
     CameraFovPacket(FriendlyByteBuf buf) {
         this(buf.readFloat());

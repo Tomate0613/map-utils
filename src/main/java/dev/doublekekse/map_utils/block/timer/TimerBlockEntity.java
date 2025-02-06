@@ -13,6 +13,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static dev.doublekekse.map_utils.registry.MapUtilsBlockEntities.TIMER_BLOCK_ENTITY;
+
 public class TimerBlockEntity extends BlockEntity {
     public int interval = 10;
     public int duration = 1;
@@ -21,7 +23,7 @@ public class TimerBlockEntity extends BlockEntity {
     boolean enabled = false;
 
     public TimerBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(MapUtils.TIMER_BLOCK_ENTITY, blockPos, blockState);
+        super(TIMER_BLOCK_ENTITY, blockPos, blockState);
     }
 
     @Override

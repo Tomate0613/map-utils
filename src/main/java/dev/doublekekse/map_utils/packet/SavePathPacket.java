@@ -16,7 +16,7 @@ public record SavePathPacket(String id, SplinePath path) implements CustomPacket
         SplinePath.STREAM_CODEC, SavePathPacket::path,
         SavePathPacket::new
     );
-    public static final CustomPacketPayload.Type<SavePathPacket> TYPE = new CustomPacketPayload.Type<>(MapUtils.identifier("save_path"));
+    public static final CustomPacketPayload.Type<SavePathPacket> TYPE = new CustomPacketPayload.Type<>(MapUtils.id("save_path"));
 
     @Override
     public Type<? extends CustomPacketPayload> type() {

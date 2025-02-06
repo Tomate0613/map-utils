@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 public record CameraSplinePacket(@Nullable String path, int splineDuration) implements CustomPacketPayload {
     public static final StreamCodec<FriendlyByteBuf, CameraSplinePacket> STREAM_CODEC = CustomPacketPayload.codec(CameraSplinePacket::write, CameraSplinePacket::load);
-    public static final CustomPacketPayload.Type<CameraSplinePacket> TYPE = new CustomPacketPayload.Type<>(MapUtils.identifier("camera_spline_packet"));
+    public static final CustomPacketPayload.Type<CameraSplinePacket> TYPE = new CustomPacketPayload.Type<>(MapUtils.id("camera_spline_packet"));
 
     static CameraSplinePacket load(FriendlyByteBuf buf) {
         var length = buf.readInt();
