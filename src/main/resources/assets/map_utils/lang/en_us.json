@@ -32,7 +32,7 @@
   "commands.redstone.timed": "Powered block at %s %s %s with power %s for %s",
   "commands.redstone.infinite": "Powered block at %s %s %s with power %s",
   "commands.map_utils.path_editor.toggle.enable": "Enabled path editor",
-  "commands.map_utils.path_editor.toggle.disable": "Enabled path editor",
+  "commands.map_utils.path_editor.toggle.disable": "Disabled path editor",
   "gui.map_utils.copy.confirm": "Do you want to copy this to your clipboard?",
   "gui.map_utils.suggest_command.confirm": "Do you want to edit or run this command?",
   "gui.map_utils.screen.timer_edit": "Edit Timer",
