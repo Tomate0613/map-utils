@@ -4,6 +4,7 @@
   "package": "dev.doublekekse.map_utils.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "CommandSourceStackMixin",
     "PlayerMixin"
   ],
   "client": [
