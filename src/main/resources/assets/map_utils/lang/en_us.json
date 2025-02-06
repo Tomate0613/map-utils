@@ -28,6 +28,7 @@
   "commands.map_utils.camera.path.set": "Set camera path (%s nodes, speed = %s)",
   "commands.map_utils.camera.no_player": "Not a player source",
   "commands.map_utils.schedule.created.command": "Scheduled command '%s' in %s ticks at gametime %s",
+  "commands.map_utils.inventory.list": "Listing inventories:",
   "commands.redstone.failed": "Block at %s %s %s is not a variable redstone block",
   "commands.redstone.timed": "Powered block at %s %s %s with power %s for %s",
   "commands.redstone.infinite": "Powered block at %s %s %s with power %s",

@@ -67,7 +67,18 @@ public class InventoryCommand {
                     context.getSource().sendSuccess(() -> Component.translatable("commands.map_utils.inventory.loaded", finalSave), false);
 
                     return 1;
-                })))))
+                }))))).then(literal("list").executes(ctx -> {
+                    var source = ctx.getSource();
+                    var data = MapUtilsSavedData.getServerData(source.getServer());
+
+                    source.sendSuccess(() -> Component.translatable("commands.map_utils.inventory.list"), false);
+
+                    for (var key : data.inventories.getAllKeys()) {
+                        source.sendSuccess(() -> Component.literal(key), false);
+                    }
+
+                    return 1;
+                }))
         );
     }
 }

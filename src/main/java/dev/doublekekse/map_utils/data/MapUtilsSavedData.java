@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MapUtilsSavedData extends SavedData {
-    private CompoundTag inventories = new CompoundTag();
+    public CompoundTag inventories = new CompoundTag();
     public Map<String, SplinePath> paths = new HashMap<>();
 
     public void addInventory(String saveName, ListTag inventory) {
