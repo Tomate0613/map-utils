@@ -12,22 +12,20 @@ import net.minecraft.world.phys.Vec3;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SplinePath {
-    private final List<SplineControlPoint> controlPoints;
+public record SplinePath(List<SplineControlPoint> controlPoints) {
     public static final StreamCodec<FriendlyByteBuf, SplinePath> STREAM_CODEC = StreamCodec.composite(
         ByteBufCodecs.collection(ArrayList::new, SplineControlPoint.STREAM_CODEC), SplinePath::controlPoints,
         SplinePath::new
     );
 
-    public SplinePath(List<SplineControlPoint> controlPoints) {
+    public SplinePath {
         if (controlPoints == null || controlPoints.isEmpty()) {
             throw new IllegalArgumentException("At least one control point is required.");
         }
-        this.controlPoints = controlPoints;
     }
 
     public Vec3 getPosition(double progress) {
-        if(controlPoints.size() == 1) {
+        if (controlPoints.size() == 1) {
             return controlPoints.getFirst().position();
         }
 
@@ -46,7 +44,7 @@ public class SplinePath {
     }
 
     public Vec2 getRotation(double progress) {
-        if(controlPoints.size() == 1) {
+        if (controlPoints.size() == 1) {
             return controlPoints.getFirst().rotation();
         }
 
@@ -82,10 +80,6 @@ public class SplinePath {
             coefficients[0] * p0.y + coefficients[1] * p1.y + coefficients[2] * p2.y + coefficients[3] * p3.y,
             coefficients[0] * p0.z + coefficients[1] * p1.z + coefficients[2] * p2.z + coefficients[3] * p3.z
         );
-    }
-
-    public List<SplineControlPoint> controlPoints() {
-        return controlPoints;
     }
 
     public int size() {
