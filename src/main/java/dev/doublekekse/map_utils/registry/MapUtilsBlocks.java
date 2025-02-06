@@ -1,7 +1,6 @@
 package dev.doublekekse.map_utils.registry;
 
 import dev.doublekekse.map_utils.MapUtils;
-import dev.doublekekse.map_utils.block.EntityBarrier;
 import dev.doublekekse.map_utils.block.VariableRedstoneBlock;
 import dev.doublekekse.map_utils.block.timer.TimerBlock;
 import net.minecraft.core.Registry;
@@ -25,17 +24,6 @@ public class MapUtilsBlocks {
             .sound(SoundType.METAL)
             .isRedstoneConductor(Blocks::never)
         ), "variable_redstone_block");
-    public static final EntityBarrier ENTITY_BARRIER_BLOCK = registerWithItem(
-        new EntityBarrier(BlockBehaviour.Properties.of()
-            .strength(-1.0F, 3600000.8F)
-            .mapColor(MapColor.NONE)
-            .noLootTable()
-            .noOcclusion()
-            .isValidSpawn(Blocks::never)
-            .noTerrainParticles()
-            .pushReaction(PushReaction.BLOCK)
-        ), "entity_barrier"
-    );
     public static final TimerBlock TIMER_BLOCK = registerWithItem(
         new TimerBlock(BlockBehaviour.Properties.of()
             .sound(SoundType.COPPER_BULB)

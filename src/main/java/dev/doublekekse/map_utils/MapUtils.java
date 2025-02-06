@@ -1,11 +1,5 @@
 package dev.doublekekse.map_utils;
 
-import dev.doublekekse.map_utils.block.EntityBarrier;
-import dev.doublekekse.map_utils.block.timer.TimerBlock;
-import dev.doublekekse.map_utils.block.timer.TimerBlockEntity;
-import dev.doublekekse.map_utils.command.*;
-import dev.doublekekse.map_utils.command.argument.PathArgumentType;
-import dev.doublekekse.map_utils.block.VariableRedstoneBlock;
 import dev.doublekekse.map_utils.data.MapUtilsSavedData;
 import dev.doublekekse.map_utils.packet.*;
 import dev.doublekekse.map_utils.registry.MapUtilsBlockEntities;

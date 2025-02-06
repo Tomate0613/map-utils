@@ -12,7 +12,6 @@ public class MapUtilsCreativeTabs {
         });
 
         ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.OP_BLOCKS).register(content -> {
-            content.accept(ENTITY_BARRIER_BLOCK);
             content.accept(VARIABLE_REDSTONE_BLOCK);
             content.accept(TIMER_BLOCK);
         });
