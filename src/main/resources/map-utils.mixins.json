@@ -10,6 +10,7 @@
   "client": [
     "AbstractClientPlayerMixin",
     "CameraMixin",
+    "GameRendererMixin",
     "GuiMixin",
     "LocalPlayerMixin",
     "MinecraftMixin"
