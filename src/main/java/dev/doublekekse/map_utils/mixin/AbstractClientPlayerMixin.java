@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class AbstractClientPlayerMixin {
     @Inject(method = "getFieldOfViewModifier", at = @At("HEAD"), cancellable = true)
     void getFieldOfViewModifier(CallbackInfoReturnable<Float> cir) {
-        if(CameraOverrideState.fov != -1) {
+        if (CameraOverrideState.fov != -1) {
             cir.setReturnValue(CameraOverrideState.fov);
         }
     }
