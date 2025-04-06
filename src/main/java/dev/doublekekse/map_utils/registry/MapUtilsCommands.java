@@ -17,6 +17,7 @@ public class MapUtilsCommands {
                 CameraCommand.register(dispatcher);
                 RedstoneCommand.register(dispatcher);
                 PathCommand.register(dispatcher);
+                AccelerateCommand.register(dispatcher);
             }
         );
 
