@@ -18,6 +18,7 @@ public class MapUtilsCommands {
                 RedstoneCommand.register(dispatcher);
                 PathCommand.register(dispatcher);
                 AccelerateCommand.register(dispatcher);
+                PetsCommand.register(dispatcher);
             }
         );
 

@@ -10,27 +10,35 @@ import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class MapUtilsSavedData extends SavedData {
     public CompoundTag inventories = new CompoundTag();
+    public Map<String, List<CompoundTag>> pets = new HashMap<>();
     public Map<String, SplinePath> paths = new HashMap<>();
 
-    public void addInventory(String saveName, ListTag inventory) {
-        inventories.put(saveName, inventory);
+    public void setPets(String id, List<CompoundTag> pets) {
+        this.pets.put(id, pets);
+    }
+
+    public List<CompoundTag> getPets(String id) {
+        return this.pets.get(id);
+    }
+
+    public void setInventory(String id, ListTag inventory) {
+        inventories.put(id, inventory);
         setDirty();
     }
 
-    public ListTag getInventory(String saveName, boolean remove) {
-        if (inventories.get(saveName) == null) {
+    public ListTag getInventory(String id, boolean remove) {
+        if (inventories.get(id) == null) {
             return null;
         }
 
-        var inventory = inventories.getList(saveName, CompoundTag.TAG_COMPOUND);
+        var inventory = inventories.getList(id, CompoundTag.TAG_COMPOUND);
 
         if (remove) {
-            inventories.remove(saveName);
+            inventories.remove(id);
             setDirty();
         }
 
@@ -41,17 +49,42 @@ public class MapUtilsSavedData extends SavedData {
     public @NotNull CompoundTag save(CompoundTag compoundTag, HolderLookup.Provider provider) {
         compoundTag.put("inventories", inventories);
         compoundTag.put("paths", savePaths());
+        compoundTag.put("pets", savePets());
 
         return compoundTag;
     }
 
-    public CompoundTag savePaths() {
-        var pathsTag = new CompoundTag();
-        for (var entry : paths.entrySet()) {
-            pathsTag.put(entry.getKey(), entry.getValue().write());
+
+    private CompoundTag savePets() {
+        var tag = new CompoundTag();
+
+
+        for (var entry : pets.entrySet()) {
+            var listTag = new ListTag();
+            listTag.addAll(entry.getValue());
+            tag.put(entry.getKey(), listTag);
         }
 
-        return pathsTag;
+        return tag;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void loadPets(CompoundTag tag) {
+        for (var key : tag.getAllKeys()) {
+            var listTag = tag.getList(key, ListTag.TAG_COMPOUND);
+            var list = new ArrayList<>(listTag);
+
+            pets.put(key, (List<CompoundTag>) (Object) list);
+        }
+    }
+
+    public CompoundTag savePaths() {
+        var tag = new CompoundTag();
+        for (var entry : paths.entrySet()) {
+            tag.put(entry.getKey(), entry.getValue().write());
+        }
+
+        return tag;
     }
 
     public void loadPaths(CompoundTag pathsTag) {
@@ -66,6 +99,7 @@ public class MapUtilsSavedData extends SavedData {
 
         data.inventories = compoundTag.getCompound("inventories");
         data.loadPaths(compoundTag.getCompound("paths"));
+        data.loadPets(compoundTag.getCompound("pets"));
 
         return data;
     }

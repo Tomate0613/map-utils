@@ -31,7 +31,7 @@ public class InventoryCommand {
 
                         var invList = new ListTag();
                         inv.save(invList);
-                        data.addInventory(save, invList);
+                        data.setInventory(save, invList);
 
                         if (remove) {
                             inv.clearContent();
