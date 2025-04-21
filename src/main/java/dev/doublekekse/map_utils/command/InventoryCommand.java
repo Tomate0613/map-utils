@@ -6,7 +6,6 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import dev.doublekekse.map_utils.data.MapUtilsSavedData;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 
 import static net.minecraft.commands.Commands.argument;
@@ -21,7 +20,6 @@ public class InventoryCommand {
                         var save = StringArgumentType.getString(context, "save");
                         var isGlobal = save.charAt(0) == '+';
                         var player = EntityArgument.getPlayer(context, "player");
-                        var inv = player.getInventory();
                         var data = MapUtilsSavedData.getServerData(context.getSource().getServer());
                         var remove = BoolArgumentType.getBool(context, "remove");
 
@@ -29,13 +27,7 @@ public class InventoryCommand {
                             save = player.getStringUUID() + "-" + save;
                         }
 
-                        var invList = new ListTag();
-                        inv.save(invList);
-                        data.setInventory(save, invList);
-
-                        if (remove) {
-                            inv.clearContent();
-                        }
+                        data.saveInventories(player, save, remove);
 
                         String finalSave = save;
                         context.getSource().sendSuccess(() -> Component.translatable("commands.map_utils.inventory.saved", finalSave), false);
@@ -46,7 +38,6 @@ public class InventoryCommand {
                     var save = StringArgumentType.getString(context, "save");
                     var isGlobal = save.charAt(0) == '+';
                     var player = EntityArgument.getPlayer(context, "player");
-                    var inv = player.getInventory();
                     var data = MapUtilsSavedData.getServerData(context.getSource().getServer());
                     var remove = BoolArgumentType.getBool(context, "remove");
 
@@ -55,14 +46,12 @@ public class InventoryCommand {
                     }
                     String finalSave = save;
 
-                    var invList = data.getInventory(save, remove);
+                    var invResult = data.loadInventories(player, save, remove);
 
-                    if (invList == null) {
+                    if (!invResult) {
                         context.getSource().sendFailure(Component.translatable("commands.map_utils.inventory.missing", finalSave));
                         return -1;
                     }
-
-                    inv.load(invList);
 
                     context.getSource().sendSuccess(() -> Component.translatable("commands.map_utils.inventory.loaded", finalSave), false);
 
@@ -78,7 +67,7 @@ public class InventoryCommand {
                     }
 
                     return 1;
-                }))
-        );
+                })
+        ));
     }
 }
