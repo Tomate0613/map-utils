@@ -41,11 +41,17 @@ public class MapUtilsSavedData extends SavedData {
             if (capability.isPresent() && capability.get().isEquipped(stack -> !stack.isEmpty())) {
                 CompoundTag accessoriesTag = new CompoundTag();
                 for (var container : capability.get().getContainers().values()) {
-                    ListTag tag = container.getAccessories().createTag(player.level().registryAccess());
-                    if (tag.isEmpty())
+                    CompoundTag containerTag = new CompoundTag();
+                    ListTag accessories = container.getAccessories().createTag(player.level().registryAccess());
+                    ListTag cosmeticAccessories = container.getCosmeticAccessories().createTag(player.level().registryAccess());
+
+                    if (accessories.isEmpty() && cosmeticAccessories.isEmpty())
                         continue;
-                    accessoriesTag.put(container.getSlotName(), tag);
-                    container.update();
+
+                    containerTag.put("accessories", accessories);
+                    containerTag.put("cosmetic_accessories", cosmeticAccessories);
+
+                    accessoriesTag.put(container.getSlotName(), containerTag);
                 }
 
                 inventory.put("accessories:accessories", accessoriesTag);
@@ -95,11 +101,17 @@ public class MapUtilsSavedData extends SavedData {
                 if (optionalCap.isPresent()) {
                     AccessoriesCapability capability = optionalCap.get();
                     for (var container : capability.getContainers().values()) {
-                        ListTag containerTag = inventory.getCompound("accessories:accessories").getList(container.getSlotName(), Tag.TAG_COMPOUND);
+                        CompoundTag containerTag = inventory.getCompound("accessories:accessories").getCompound(container.getSlotName());
                         if (!containerTag.isEmpty()) {
-                            container.getAccessories().fromTag(containerTag, player.level().registryAccess());
-                            container.update();
+                            ListTag accessoriesTag = containerTag.getList("accessories", Tag.TAG_LIST);
+                            ListTag cosmeticAccessoriesTag = containerTag.getList("cosmetic_accessories", Tag.TAG_LIST);
+                            container.getAccessories().fromTag(accessoriesTag, player.level().registryAccess());
+                            container.getAccessories().fromTag(cosmeticAccessoriesTag, player.level().registryAccess());
+                        } else {
+                            container.getAccessories().clearContent();
+                            container.getCosmeticAccessories().clearContent();
                         }
+                        container.update();
                     }
                 }
             }
