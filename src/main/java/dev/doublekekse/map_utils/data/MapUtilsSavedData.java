@@ -48,10 +48,10 @@ public class MapUtilsSavedData extends SavedData {
                     if (accessories.isEmpty() && cosmeticAccessories.isEmpty())
                         continue;
 
-                    if (accessories.isEmpty()) {
+                    if (!accessories.isEmpty()) {
                         containerTag.put("accessories", accessories);
                     }
-                    if (cosmeticAccessories.isEmpty()) {
+                    if (!cosmeticAccessories.isEmpty()) {
                         containerTag.put("cosmetic_accessories", cosmeticAccessories);
                     }
 
