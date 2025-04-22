@@ -48,8 +48,12 @@ public class MapUtilsSavedData extends SavedData {
                     if (accessories.isEmpty() && cosmeticAccessories.isEmpty())
                         continue;
 
-                    containerTag.put("accessories", accessories);
-                    containerTag.put("cosmetic_accessories", cosmeticAccessories);
+                    if (accessories.isEmpty()) {
+                        containerTag.put("accessories", accessories);
+                    }
+                    if (cosmeticAccessories.isEmpty()) {
+                        containerTag.put("cosmetic_accessories", cosmeticAccessories);
+                    }
 
                     accessoriesTag.put(container.getSlotName(), containerTag);
                 }
@@ -106,7 +110,7 @@ public class MapUtilsSavedData extends SavedData {
                             ListTag accessoriesTag = containerTag.getList("accessories", Tag.TAG_LIST);
                             ListTag cosmeticAccessoriesTag = containerTag.getList("cosmetic_accessories", Tag.TAG_LIST);
                             container.getAccessories().fromTag(accessoriesTag, player.level().registryAccess());
-                            container.getAccessories().fromTag(cosmeticAccessoriesTag, player.level().registryAccess());
+                            container.getCosmeticAccessories().fromTag(cosmeticAccessoriesTag, player.level().registryAccess());
                         } else {
                             container.getAccessories().clearContent();
                             container.getCosmeticAccessories().clearContent();
