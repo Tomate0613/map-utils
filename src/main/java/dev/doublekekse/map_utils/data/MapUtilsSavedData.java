@@ -5,6 +5,7 @@ import dev.doublekekse.map_utils.curve.SplinePath;
 import dev.emi.trinkets.api.TrinketComponent;
 import dev.emi.trinkets.api.TrinketsApi;
 import io.wispforest.accessories.api.AccessoriesCapability;
+import io.wispforest.accessories.impl.AccessoriesHolderImpl;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -89,6 +90,7 @@ public class MapUtilsSavedData extends SavedData {
         setDirty();
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     public boolean loadInventories(Player player, String id, boolean remove) {
         if (inventories.get(id) == null) {
             return false;
@@ -104,18 +106,18 @@ public class MapUtilsSavedData extends SavedData {
                 Optional<AccessoriesCapability> optionalCap = AccessoriesCapability.getOptionally(player);
                 if (optionalCap.isPresent()) {
                     AccessoriesCapability capability = optionalCap.get();
-                    for (var container : capability.getContainers().values()) {
-                        CompoundTag containerTag = inventory.getCompound("accessories:accessories").getCompound(container.getSlotName());
+                    for (var entry : ((AccessoriesHolderImpl)capability.getHolder()).getSlotContainers().entrySet()) {
+                        CompoundTag containerTag = inventory.getCompound("accessories:accessories").getCompound(entry.getKey());
                         if (!containerTag.isEmpty()) {
-                            ListTag accessoriesTag = containerTag.getList("accessories", Tag.TAG_LIST);
-                            ListTag cosmeticAccessoriesTag = containerTag.getList("cosmetic_accessories", Tag.TAG_LIST);
-                            container.getAccessories().fromTag(accessoriesTag, player.level().registryAccess());
-                            container.getCosmeticAccessories().fromTag(cosmeticAccessoriesTag, player.level().registryAccess());
+                            ListTag accessoriesTag = containerTag.getList("accessories", Tag.TAG_COMPOUND);
+                            ListTag cosmeticAccessoriesTag = containerTag.getList("cosmetic_accessories", Tag.TAG_COMPOUND);
+                            entry.getValue().getAccessories().fromTag(accessoriesTag, player.level().registryAccess());
+                            entry.getValue().getCosmeticAccessories().fromTag(cosmeticAccessoriesTag, player.level().registryAccess());
                         } else {
-                            container.getAccessories().clearContent();
-                            container.getCosmeticAccessories().clearContent();
+                            entry.getValue().getAccessories().clearContent();
+                            entry.getValue().getCosmeticAccessories().clearContent();
                         }
-                        container.update();
+                        entry.getValue().update();
                     }
                 }
             }
