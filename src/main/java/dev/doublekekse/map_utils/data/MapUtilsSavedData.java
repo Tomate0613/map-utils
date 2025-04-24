@@ -2,7 +2,6 @@ package dev.doublekekse.map_utils.data;
 
 import dev.doublekekse.map_utils.MapUtils;
 import dev.doublekekse.map_utils.curve.SplinePath;
-import dev.emi.trinkets.api.TrinketComponent;
 import dev.emi.trinkets.api.TrinketsApi;
 import io.wispforest.accessories.api.AccessoriesCapability;
 import io.wispforest.accessories.impl.AccessoriesHolderImpl;
@@ -34,24 +33,29 @@ public class MapUtilsSavedData extends SavedData {
     }
 
     public void saveInventories(Player player, String id, boolean remove) {
-        CompoundTag inventory = new CompoundTag();
+        var inventory = new CompoundTag();
         inventory.put("minecraft:inventory", player.getInventory().save(new ListTag()));
 
         if (FabricLoader.getInstance().isModLoaded("accessories")) {
-            Optional<AccessoriesCapability> capability = AccessoriesCapability.getOptionally(player);
-            if (capability.isPresent() && capability.get().isEquipped(stack -> !stack.isEmpty())) {
-                CompoundTag accessoriesTag = new CompoundTag();
-                for (var container : capability.get().getContainers().values()) {
-                    CompoundTag containerTag = new CompoundTag();
-                    ListTag accessories = container.getAccessories().createTag(player.level().registryAccess());
-                    ListTag cosmeticAccessories = container.getCosmeticAccessories().createTag(player.level().registryAccess());
+            var capability = AccessoriesCapability.getOptionally(player);
 
-                    if (accessories.isEmpty() && cosmeticAccessories.isEmpty())
+            if (capability.isPresent() && capability.get().isEquipped(stack -> !stack.isEmpty())) {
+                var accessoriesTag = new CompoundTag();
+
+                for (var container : capability.get().getContainers().values()) {
+                    var accessories = container.getAccessories().createTag(player.level().registryAccess());
+                    var cosmeticAccessories = container.getCosmeticAccessories().createTag(player.level().registryAccess());
+
+                    if (accessories.isEmpty() && cosmeticAccessories.isEmpty()) {
                         continue;
+                    }
+
+                    CompoundTag containerTag = new CompoundTag();
 
                     if (!accessories.isEmpty()) {
                         containerTag.put("accessories", accessories);
                     }
+
                     if (!cosmeticAccessories.isEmpty()) {
                         containerTag.put("cosmetic_accessories", cosmeticAccessories);
                     }
@@ -66,9 +70,10 @@ public class MapUtilsSavedData extends SavedData {
                 }
             }
         } else if (FabricLoader.getInstance().isModLoaded("trinkets")) {
-            Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(player);
+            var component = TrinketsApi.getTrinketComponent(player);
+
             if (component.isPresent() && component.get().isEquipped(stack -> !stack.isEmpty())) {
-                CompoundTag trinketsTag = new CompoundTag();
+                var trinketsTag = new CompoundTag();
                 component.get().writeToNbt(trinketsTag, player.level().registryAccess());
 
                 inventory.put("trinkets:trinkets", trinketsTag);
@@ -98,34 +103,42 @@ public class MapUtilsSavedData extends SavedData {
 
         if (CompoundTag.TYPE.equals(Objects.requireNonNull(inventories.get(id)).getType())) {
             var inventory = inventories.getCompound(id);
+
             if (inventory.contains("minecraft:inventory", Tag.TAG_LIST)) {
                 player.getInventory().load(inventory.getList("minecraft:inventory", Tag.TAG_COMPOUND));
             }
 
+
             if (FabricLoader.getInstance().isModLoaded("accessories") && inventory.contains("accessories:accessories")) {
-                Optional<AccessoriesCapability> optionalCap = AccessoriesCapability.getOptionally(player);
-                if (optionalCap.isPresent()) {
-                    AccessoriesCapability capability = optionalCap.get();
-                    for (var entry : ((AccessoriesHolderImpl)capability.getHolder()).getSlotContainers().entrySet()) {
-                        CompoundTag containerTag = inventory.getCompound("accessories:accessories").getCompound(entry.getKey());
+                var optionalCapability = AccessoriesCapability.getOptionally(player);
+
+                if (optionalCapability.isPresent()) {
+                    var capability = optionalCapability.get();
+
+                    for (var entry : ((AccessoriesHolderImpl) capability.getHolder()).getSlotContainers().entrySet()) {
+                        var containerTag = inventory.getCompound("accessories:accessories").getCompound(entry.getKey());
+
                         if (!containerTag.isEmpty()) {
-                            ListTag accessoriesTag = containerTag.getList("accessories", Tag.TAG_COMPOUND);
-                            ListTag cosmeticAccessoriesTag = containerTag.getList("cosmetic_accessories", Tag.TAG_COMPOUND);
+                            var accessoriesTag = containerTag.getList("accessories", Tag.TAG_COMPOUND);
+                            var cosmeticAccessoriesTag = containerTag.getList("cosmetic_accessories", Tag.TAG_COMPOUND);
+
                             entry.getValue().getAccessories().fromTag(accessoriesTag, player.level().registryAccess());
                             entry.getValue().getCosmeticAccessories().fromTag(cosmeticAccessoriesTag, player.level().registryAccess());
                         } else {
                             entry.getValue().getAccessories().clearContent();
                             entry.getValue().getCosmeticAccessories().clearContent();
                         }
+
                         entry.getValue().update();
                     }
                 }
             }
 
             if (FabricLoader.getInstance().isModLoaded("trinkets") && inventory.contains("trinkets:trinkets")) {
-                Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(player);
+                var component = TrinketsApi.getTrinketComponent(player);
                 component.ifPresent(trinketComponent -> trinketComponent.readFromNbt(inventory.getCompound("trinkets:trinkets"), player.level().registryAccess()));
             }
+
         } else if (ListTag.TYPE.equals(Objects.requireNonNull(inventories.get(id)).getType())) {
             var inventory = inventories.getList(id, CompoundTag.TAG_COMPOUND);
             player.getInventory().load(inventory);
@@ -152,7 +165,6 @@ public class MapUtilsSavedData extends SavedData {
     private CompoundTag savePets() {
         var tag = new CompoundTag();
 
-
         for (var entry : pets.entrySet()) {
             var listTag = new ListTag();
             listTag.addAll(entry.getValue());
@@ -174,6 +186,7 @@ public class MapUtilsSavedData extends SavedData {
 
     public CompoundTag savePaths() {
         var tag = new CompoundTag();
+
         for (var entry : paths.entrySet()) {
             tag.put(entry.getKey(), entry.getValue().write());
         }
