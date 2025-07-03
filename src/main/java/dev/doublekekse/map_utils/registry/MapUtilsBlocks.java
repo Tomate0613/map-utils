@@ -5,7 +5,8 @@ import dev.doublekekse.map_utils.block.VariableRedstoneBlock;
 import dev.doublekekse.map_utils.block.timer.TimerBlock;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -13,32 +14,38 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.material.PushReaction;
+
+import java.util.function.Function;
 
 public class MapUtilsBlocks {
-    public static final VariableRedstoneBlock VARIABLE_REDSTONE_BLOCK = registerWithItem(
-        new VariableRedstoneBlock(BlockBehaviour.Properties.of()
+    public static final VariableRedstoneBlock VARIABLE_REDSTONE_BLOCK = register(
+        VariableRedstoneBlock::new, BlockBehaviour.Properties.of()
             .mapColor(MapColor.FIRE)
             .requiresCorrectToolForDrops()
             .strength(5.0F, 6.0F)
             .sound(SoundType.METAL)
             .isRedstoneConductor(Blocks::never)
-        ), "variable_redstone_block");
-    public static final TimerBlock TIMER_BLOCK = registerWithItem(
-        new TimerBlock(BlockBehaviour.Properties.of()
+        , "variable_redstone_block", true);
+
+    public static final TimerBlock TIMER_BLOCK = register(TimerBlock::new,
+        BlockBehaviour.Properties.of()
             .sound(SoundType.COPPER_BULB)
-        ), "timer_block"
+        , "timer_block",
+        true
     );
 
-    private static <T extends Block> T register(T block, String path) {
-        ResourceLocation blockId = MapUtils.id(path);
-        return Registry.register(BuiltInRegistries.BLOCK, blockId, block);
-    }
+    private static <T extends Block> T register(Function<BlockBehaviour.Properties, T> blockFactory, BlockBehaviour.Properties properties, String path, boolean shouldRegisterItem) {
+        var blockKey = ResourceKey.create(Registries.BLOCK, MapUtils.id(path));
+        var block = blockFactory.apply(properties.setId(blockKey));
 
-    private static <T extends Block> T registerWithItem(T block, String path) {
-        ResourceLocation blockId = MapUtils.id(path);
-        Registry.register(BuiltInRegistries.ITEM, blockId, new BlockItem(block, new Item.Properties()));
-        return Registry.register(BuiltInRegistries.BLOCK, blockId, block);
+        if (shouldRegisterItem) {
+            var itemKey = ResourceKey.create(Registries.ITEM, MapUtils.id(path));
+
+            var blockItem = new BlockItem(block, new Item.Properties().setId(itemKey));
+            Registry.register(BuiltInRegistries.ITEM, itemKey, blockItem);
+        }
+
+        return Registry.register(BuiltInRegistries.BLOCK, blockKey, block);
     }
 
     public static void register() {

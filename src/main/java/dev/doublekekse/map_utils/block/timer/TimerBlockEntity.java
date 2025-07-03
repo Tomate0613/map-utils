@@ -10,6 +10,8 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,23 +29,23 @@ public class TimerBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
-        super.saveAdditional(compoundTag, provider);
+    protected void saveAdditional(@NotNull ValueOutput valueOutput) {
+        super.saveAdditional(valueOutput);
 
-        compoundTag.putInt("interval", interval);
-        compoundTag.putInt("duration", duration);
-        compoundTag.putLong("tick_data", tickData);
-        compoundTag.putBoolean("tick_unloaded", tickUnloaded);
+        valueOutput.putInt("interval", interval);
+        valueOutput.putInt("duration", duration);
+        valueOutput.putLong("tick_data", tickData);
+        valueOutput.putBoolean("tick_unloaded", tickUnloaded);
     }
 
     @Override
-    protected void loadAdditional(CompoundTag compoundTag, HolderLookup.Provider provider) {
-        super.loadAdditional(compoundTag, provider);
+    protected void loadAdditional(@NotNull ValueInput valueInput) {
+        super.loadAdditional(valueInput);
 
-        interval = compoundTag.getInt("interval");
-        duration = compoundTag.getInt("duration");
-        tickData = compoundTag.getLong("tick_data");
-        tickUnloaded = compoundTag.getBoolean("tick_unloaded");
+        interval = valueInput.getInt("interval").orElse(10);
+        duration = valueInput.getInt("duration").orElse(1);
+        tickData = valueInput.getLong("tick_data").orElse(0L);
+        tickUnloaded = valueInput.getBooleanOr("tick_unloaded", false);
     }
 
     public void enable() {

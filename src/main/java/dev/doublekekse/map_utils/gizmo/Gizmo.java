@@ -33,8 +33,7 @@ public class Gizmo {
     }
 
     public void scroll(Direction direction, double value) {
-        var normal = direction.getNormal();
-        var offset = new Vec3(normal.getX() * .1 * value, normal.getY() * .1 * value, normal.getZ() * .1 * value);
+        var offset = direction.getUnitVec3().scale(.1 * value);
         move(offset);
     }
 

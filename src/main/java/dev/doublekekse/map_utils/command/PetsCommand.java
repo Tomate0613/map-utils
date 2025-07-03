@@ -7,8 +7,13 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.ProblemReporter;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.TagValueOutput;
 
 import java.util.ArrayList;
 
@@ -31,9 +36,10 @@ public class PetsCommand {
                         var list = new ArrayList<CompoundTag>(pets.size());
 
                         for (var pet : pets) {
-                            var tag = new CompoundTag();
-                            if (pet.save(tag)) {
-                                list.add(tag);
+                            var valueOutput = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, level.registryAccess());
+
+                            if (pet.save(valueOutput)) {
+                                list.add(valueOutput.buildResult());
                                 pet.discard();
                             }
                         }
@@ -57,7 +63,13 @@ public class PetsCommand {
                     }
 
                     var level = player.level();
-                    EntityType.loadEntitiesRecursive(pets, level).forEach(level::addFreshEntity);
+                    for (var pet : pets) {
+                        var valueInput = TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), pet);
+                        EntityType.loadEntityRecursive(valueInput, level, EntitySpawnReason.LOAD, (Entity entity) -> {
+                            level.addFreshEntity(entity);
+                            return entity;
+                        });
+                    }
 
                     ctx.getSource().sendSuccess(() -> Component.translatable("commands.map_utils.pets.load", id), false);
 

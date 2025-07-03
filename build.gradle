@@ -31,11 +31,11 @@ dependencies {
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    modCompileOnly "dev.emi:trinkets:3.10.0"
-    modCompileOnly "io.wispforest:accessories-fabric:1.1.0-beta.39+1.21.1"
+    //modCompileOnly "dev.emi:trinkets:3.10.0"
+    //modCompileOnly "io.wispforest:accessories-fabric:1.1.0-beta.39+1.21.1"
 
 //    modLocalRuntime "dev.emi:trinkets:3.10.0"
-    modLocalRuntime "io.wispforest:accessories-fabric:1.1.0-beta.39+1.21.1"
+    //modLocalRuntime "io.wispforest:accessories-fabric:1.1.0-beta.39+1.21.1"
 
     modCompileOnly "dev.gegy:player-roles:1.6.11"
     modCompileOnly "dev.gegy:player-roles-api:1.6.11"

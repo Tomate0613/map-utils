@@ -36,7 +36,7 @@ public abstract class MinecraftMixin
         super(string);
     }
 
-    @Inject(method = "disconnect(Lnet/minecraft/client/gui/screens/Screen;)V", at = @At("HEAD"))
+    @Inject(method = "disconnect", at = @At("HEAD"))
     void disconnect(CallbackInfo ci) {
         CameraOverrideState.reset();
     }
@@ -57,7 +57,7 @@ public abstract class MinecraftMixin
     void startUseItem(CallbackInfo ci) {
         assert player != null;
 
-        if(!MapUtilsClient.pathEditorEnabled) {
+        if (!MapUtilsClient.pathEditorEnabled) {
             return;
         }
 

@@ -62,7 +62,7 @@ public class InventoryCommand {
 
                     source.sendSuccess(() -> Component.translatable("commands.map_utils.inventory.list"), false);
 
-                    for (var key : data.inventories.getAllKeys()) {
+                    for (var key : data.inventories.keySet()) {
                         source.sendSuccess(() -> Component.literal(key), false);
                     }
 

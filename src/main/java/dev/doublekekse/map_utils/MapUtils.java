@@ -34,7 +34,7 @@ public class MapUtils implements ModInitializer {
     public void onInitialize() {
         CameraOverrideState.reset();
 
-        TimerCallbacks.SERVER_CALLBACKS.register(new CommandCallback.Serializer());
+        TimerCallbacks.SERVER_CALLBACKS.register(id("command_callback"), CommandCallback.CODEC);
 
         MapUtilsBlocks.register();
         MapUtilsBlockEntities.register();

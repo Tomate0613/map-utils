@@ -18,12 +18,14 @@ public class ScheduleCommandExtension {
         dispatcher.register(
             literal("schedule").then(literal("command").then(argument("time", TimeArgument.time()).then(argument("command", StringArgumentType.greedyString()).executes(context -> {
                 var source = context.getSource();
+                var entity = source.getEntity();
+                var level = source.getLevel();
                 var timeOffset = IntegerArgumentType.getInteger(context, "time");
                 var worldTime = source.getLevel().getGameTime() + timeOffset;
                 var command = StringArgumentType.getString(context, "command");
                 var timerQueue = source.getServer().getWorldData().overworldData().getScheduledEvents();
 
-                timerQueue.schedule(command, worldTime, new CommandCallback(command, source.getPosition(), source.getRotation(), ((CommandSourceStackDuck) source).mapUtils$permissionLevel()));
+                timerQueue.schedule(command, worldTime, new CommandCallback(level.dimension(), entity == null ? null : entity.getUUID(), command, source.getPosition(), source.getRotation(), ((CommandSourceStackDuck) source).mapUtils$permissionLevel()));
 
                 source.sendSuccess(() -> Component.translatable("commands.map_utils.schedule.created.command", command, timeOffset, worldTime), true);
                 return 1;

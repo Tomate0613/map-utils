@@ -148,7 +148,7 @@ public class PathCommand {
                         ctx.getSource().sendSuccess(() -> Component.translatable("commands.map_utils.path.edit.add.success"), false);
 
                         return 1;
-                    })).then(literal("insert").then(argument("index", IntegerArgumentType.integer(0)).executes(ctx -> {
+                    })).then(literal("insert").then(argument("before", IntegerArgumentType.integer(0)).executes(ctx -> {
                         var source = ctx.getSource();
                         var entity = source.getEntity();
 
@@ -167,7 +167,7 @@ public class PathCommand {
                         }
 
                         var controlPoints = path.controlPoints();
-                        var index = IntegerArgumentType.getInteger(ctx, "index");
+                        var index = IntegerArgumentType.getInteger(ctx, "before");
 
                         if (index < 0 || index > controlPoints.size()) {
                             ctx.getSource().sendFailure(Component.translatable("commands.map_utils.path.edit.out_of_bounds"));
@@ -228,7 +228,7 @@ public class PathCommand {
                     var rot = data.path.getRotation(progress);
 
                     data.entity.setPos(pos);
-                    data.entity.absRotateTo(rot.x, rot.y);
+                    data.entity.absSnapRotationTo(rot.x, rot.y);
                 }
             }
         });

@@ -33,7 +33,7 @@ public class RedstoneCommand {
                     }
 
                     var command = "setblock ~ ~ ~ map_utils:variable_redstone_block";
-                    timerQueue.schedule(command, gameTime, new CommandCallback(command, blockPos.getCenter(), Vec2.ZERO, 2));
+                    timerQueue.schedule(command, gameTime, new CommandCallback(level.dimension(), null, command, blockPos.getCenter(), Vec2.ZERO, 2));
 
                     level.setBlockAndUpdate(blockPos, VARIABLE_REDSTONE_BLOCK.defaultBlockState().setValue(VariableRedstoneBlock.POWER, power));
                     source.sendSuccess(() -> Component.translatable("commands.redstone.timed", blockPos.getX(), blockPos.getY(), blockPos.getZ(), power, timeOffset), true);

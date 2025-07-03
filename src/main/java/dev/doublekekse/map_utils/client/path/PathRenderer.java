@@ -9,6 +9,8 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.ShapeRenderer;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
 public class PathRenderer {
@@ -31,10 +33,13 @@ public class PathRenderer {
         renderLine(path, pose, lineConsumer, normal);
 
         for (var controlPoint : path.controlPoints()) {
-            renderControlPointRotation(controlPoint, pose, lineConsumer, normal);
+            renderControlPointRotation(controlPoint, poseStack, lineConsumer, normal);
         }
 
-        renderPathName(path, id, poseStack, ctx);
+        int index = 0;
+        for (var controlPoint : path.controlPoints()) {
+            renderControlPointText(controlPoint, id + ": " + index++, poseStack, ctx);
+        }
     }
 
     static void renderLine(SplinePath path, PoseStack.Pose pose, VertexConsumer lineConsumer, Vector3f normal) {
@@ -51,7 +56,7 @@ public class PathRenderer {
         }
     }
 
-    static void renderControlPointRotation(SplineControlPoint controlPoint, PoseStack.Pose pose, VertexConsumer lineConsumer, Vector3f normal) {
+    static void renderControlPointRotation(SplineControlPoint controlPoint, PoseStack poseStack, VertexConsumer lineConsumer, Vector3f normal) {
         var rotation = controlPoint.rotation();
 
         float yaw = (float) Math.toRadians(rotation.x + 90);
@@ -61,21 +66,21 @@ public class PathRenderer {
         float dy = (float) Math.sin(pitch);
         float dz = (float) (Math.sin(yaw) * Math.cos(pitch));
 
-        lineConsumer.addVertex(pose, controlPoint.position().toVector3f()).setColor(0xffffff00).setNormal(normal.x, normal.y, normal.z);
-        lineConsumer.addVertex(pose, controlPoint.position().add(dx, dy, dz).toVector3f()).setColor(0xffffff00).setNormal(normal.x, normal.y, normal.z);
+
+        ShapeRenderer.renderVector(poseStack, lineConsumer, controlPoint.position().toVector3f(), new Vec3(dx, dy, dz), 0xffffff00);
+        //lineConsumer.addVertex(pose, controlPoint.position().toVector3f()).setColor(0xffffff00).setNormal(normal.x, normal.y, normal.z);
+        //lineConsumer.addVertex(pose, controlPoint.position().add(dx, dy, dz).toVector3f()).setColor(0xffffff00).setNormal(normal.x, normal.y, normal.z);
     }
 
-    static void renderPathName(SplinePath path, String pathId, PoseStack poseStack, WorldRenderContext ctx) {
-        var controlPoint = path.controlPoints().getFirst();
-
+    static void renderControlPointText(SplineControlPoint controlPoint, String text, PoseStack poseStack, WorldRenderContext ctx) {
         poseStack.pushPose();
         poseStack.translate(controlPoint.position().x, controlPoint.position().y, controlPoint.position().z);
         poseStack.mulPose(ctx.camera().rotation().mul(-1));
         poseStack.scale(.01f, -.01f, .01f);
 
         var font = Minecraft.getInstance().font;
-        var width = font.width(pathId);
-        font.drawInBatch(pathId, -width / 2f, -30, 0xffffff, false, poseStack.last().pose(), ctx.consumers(), Font.DisplayMode.POLYGON_OFFSET, 0, 0xf000f0);
+        var width = font.width(text);
+        font.drawInBatch(text, -width / 2f, -30, 0xffffffff, false, poseStack.last().pose(), ctx.consumers(), Font.DisplayMode.POLYGON_OFFSET, 0, 0xf000f0);
 
         poseStack.popPose();
     }

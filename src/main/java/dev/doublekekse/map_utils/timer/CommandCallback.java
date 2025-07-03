@@ -1,15 +1,20 @@
 package dev.doublekekse.map_utils.timer;
 
-import dev.doublekekse.map_utils.MapUtils;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.doublekekse.map_utils.compat.player_roles.PlayerRoleCompatibility;
+import dev.doublekekse.map_utils.utils.AdditionalCodecs;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.timers.TimerCallback;
 import net.minecraft.world.level.timers.TimerQueue;
 import net.minecraft.world.phys.Vec2;
@@ -17,23 +22,32 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CommandCallback implements TimerCallback<MinecraftServer> {
-    final String command;
-    final Vec3 position;
-    final Vec2 rotation;
-    final int permissionLevel;
+import java.util.UUID;
 
-    public CommandCallback(String command, Vec3 position, Vec2 rotation, int permissionLevel) {
-        this.command = command;
-        this.position = position;
-        this.rotation = rotation;
-        this.permissionLevel = permissionLevel;
-    }
+public record CommandCallback(ResourceKey<Level> dimension, @Nullable UUID entityUUID,
+                              String command, Vec3 position, Vec2 rotation,
+                              int permissionLevel)
+    implements TimerCallback<MinecraftServer> {
+    public static final MapCodec<CommandCallback> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            ResourceKey.codec(Registries.DIMENSION).fieldOf("dimension").forGetter(CommandCallback::dimension),
+            AdditionalCodecs.UUID_CODEC.fieldOf("entity_uuid").forGetter(CommandCallback::entityUUID),
+            Codec.STRING.fieldOf("command").forGetter(CommandCallback::command),
+            Vec3.CODEC.fieldOf("position").forGetter(CommandCallback::position),
+            Vec2.CODEC.fieldOf("rotation").forGetter(CommandCallback::rotation),
+            Codec.INT.fieldOf("permission_level").forGetter(CommandCallback::permissionLevel)
+        ).apply(instance, CommandCallback::new)
+    );
 
+    @Override
     public void handle(MinecraftServer minecraftServer, TimerQueue<MinecraftServer> timerQueue, long l) {
-        minecraftServer.getCommands().performPrefixedCommand(createCommandSourceStack(null, minecraftServer.overworld()), command);
+        var level = minecraftServer.getLevel(dimension);
+        if (level == null) {
+            // TODO
+            return;
+        }
+        var entity = entityUUID == null ? null : level.getEntity(entityUUID);
+        minecraftServer.getCommands().performPrefixedCommand(createCommandSourceStack(entity, level), command);
     }
-
 
     private CommandSourceStack createCommandSourceStack(@Nullable Entity entity, ServerLevel level) {
         String name = entity == null ? "CommandCallback" : entity.getName().getString() + " (CommandCallback)";
@@ -42,54 +56,21 @@ public class CommandCallback implements TimerCallback<MinecraftServer> {
         entityNameComponent:
         if (entity != null) {
             var displayName = entity.getDisplayName();
-
-            if (displayName == null)
-                break entityNameComponent;
-
             displayName.copy().append(" (CommandCallback)");
         }
 
         // TODO
         var stack = new CommandSourceStack(CommandSource.NULL, position, rotation, level, permissionLevel, name, nameComponent, level.getServer(), entity);
 
-        if(FabricLoader.getInstance().isModLoaded("player_roles")) {
+        if (FabricLoader.getInstance().isModLoaded("player_roles")) {
             PlayerRoleCompatibility.applyCommandIdentityType(stack);
         }
 
         return stack;
     }
 
-    public static class Serializer extends TimerCallback.Serializer<MinecraftServer, CommandCallback> {
-        public Serializer() {
-            super(MapUtils.id("command"), CommandCallback.class);
-        }
-
-        public void serialize(CompoundTag compoundTag, CommandCallback commandCallback) {
-            compoundTag.putString("command", commandCallback.command);
-
-            compoundTag.putDouble("posX", commandCallback.position.x);
-            compoundTag.putDouble("posY", commandCallback.position.y);
-            compoundTag.putDouble("posZ", commandCallback.position.z);
-
-            compoundTag.putFloat("rotX", commandCallback.rotation.x);
-            compoundTag.putFloat("rotY", commandCallback.rotation.y);
-
-            compoundTag.putInt("permissionLevel", commandCallback.permissionLevel);
-        }
-
-        public @NotNull CommandCallback deserialize(CompoundTag compoundTag) {
-            String command = compoundTag.getString("command");
-
-            double posX = compoundTag.getDouble("posX");
-            double posY = compoundTag.getDouble("posY");
-            double posZ = compoundTag.getDouble("posZ");
-
-            float rotX = compoundTag.getFloat("rotX");
-            float rotY = compoundTag.getFloat("rotY");
-
-            int permissionLevel = compoundTag.getInt("permissionLevel");
-
-            return new CommandCallback(command, new Vec3(posX, posY, posZ), new Vec2(rotX, rotY), permissionLevel);
-        }
+    @Override
+    public @NotNull MapCodec<CommandCallback> codec() {
+        return CODEC;
     }
 }

@@ -65,7 +65,7 @@ public class TimerBlock extends BaseEntityBlock {
         BlockEntity blockEntity = level.getBlockEntity(blockPos);
         if (player.canUseGameMasterBlocks() && blockEntity instanceof TimerBlockEntity tbe && player.canUseGameMasterBlocks()) {
             ((PlayerDuck) player).mapUtils$openTimerBlock(tbe);
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         } else {
             return InteractionResult.PASS;
         }

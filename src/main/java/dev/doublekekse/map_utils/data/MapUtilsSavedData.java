@@ -1,19 +1,17 @@
 package dev.doublekekse.map_utils.data;
 
+import com.mojang.serialization.Codec;
 import dev.doublekekse.map_utils.MapUtils;
 import dev.doublekekse.map_utils.curve.SplinePath;
-import dev.emi.trinkets.api.TrinketsApi;
-import io.wispforest.accessories.api.AccessoriesCapability;
-import io.wispforest.accessories.impl.AccessoriesHolderImpl;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ProblemReporter;
+import net.minecraft.world.ItemStackWithSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraft.world.level.storage.DimensionDataStorage;
+import net.minecraft.world.level.saveddata.SavedDataType;
+import net.minecraft.world.level.storage.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -24,6 +22,11 @@ public class MapUtilsSavedData extends SavedData {
     public Map<String, List<CompoundTag>> pets = new HashMap<>();
     public Map<String, SplinePath> paths = new HashMap<>();
 
+    public static final Codec<MapUtilsSavedData> CODEC = CompoundTag.CODEC.xmap(
+        MapUtilsSavedData::load,
+        MapUtilsSavedData::save
+    );
+
     public void setPets(String id, List<CompoundTag> pets) {
         this.pets.put(id, pets);
     }
@@ -33,116 +36,25 @@ public class MapUtilsSavedData extends SavedData {
     }
 
     public void saveInventories(Player player, String id, boolean remove) {
-        var inventory = new CompoundTag();
-        inventory.put("minecraft:inventory", player.getInventory().save(new ListTag()));
-
-        if (FabricLoader.getInstance().isModLoaded("accessories")) {
-            var capability = AccessoriesCapability.getOptionally(player);
-
-            if (capability.isPresent() && capability.get().isEquipped(stack -> !stack.isEmpty())) {
-                var accessoriesTag = new CompoundTag();
-
-                for (var container : capability.get().getContainers().values()) {
-                    var accessories = container.getAccessories().createTag(player.level().registryAccess());
-                    var cosmeticAccessories = container.getCosmeticAccessories().createTag(player.level().registryAccess());
-
-                    if (accessories.isEmpty() && cosmeticAccessories.isEmpty()) {
-                        continue;
-                    }
-
-                    CompoundTag containerTag = new CompoundTag();
-
-                    if (!accessories.isEmpty()) {
-                        containerTag.put("accessories", accessories);
-                    }
-
-                    if (!cosmeticAccessories.isEmpty()) {
-                        containerTag.put("cosmetic_accessories", cosmeticAccessories);
-                    }
-
-                    accessoriesTag.put(container.getSlotName(), containerTag);
-                }
-
-                inventory.put("accessories:accessories", accessoriesTag);
-
-                if (remove) {
-                    capability.get().reset(false);
-                }
-            }
-        } else if (FabricLoader.getInstance().isModLoaded("trinkets")) {
-            var component = TrinketsApi.getTrinketComponent(player);
-
-            if (component.isPresent() && component.get().isEquipped(stack -> !stack.isEmpty())) {
-                var trinketsTag = new CompoundTag();
-                component.get().writeToNbt(trinketsTag, player.level().registryAccess());
-
-                inventory.put("trinkets:trinkets", trinketsTag);
-
-                if (remove) {
-                    component.get().getAllEquipped().forEach(tuple -> {
-                        tuple.getA().inventory().clearContent();
-                        tuple.getA().inventory().update();
-                    });
-                }
-            }
-        }
+        var inventory = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, player.level().registryAccess());
+        player.getInventory().save(inventory.list("minecraft:inventory", ItemStackWithSlot.CODEC));
 
         if (remove) {
             player.getInventory().clearContent();
         }
 
-        inventories.put(id, inventory);
+        inventories.put(id, inventory.buildResult());
         setDirty();
     }
 
     @SuppressWarnings("UnstableApiUsage")
     public boolean loadInventories(Player player, String id, boolean remove) {
-        if (inventories.get(id) == null) {
+        var inventory = TagValueInput.create(ProblemReporter.DISCARDING, player.level().registryAccess(), inventories.get(id).asCompound().get());
+        if (inventory == null) {
             return false;
         }
 
-        if (CompoundTag.TYPE.equals(Objects.requireNonNull(inventories.get(id)).getType())) {
-            var inventory = inventories.getCompound(id);
-
-            if (inventory.contains("minecraft:inventory", Tag.TAG_LIST)) {
-                player.getInventory().load(inventory.getList("minecraft:inventory", Tag.TAG_COMPOUND));
-            }
-
-
-            if (FabricLoader.getInstance().isModLoaded("accessories") && inventory.contains("accessories:accessories")) {
-                var optionalCapability = AccessoriesCapability.getOptionally(player);
-
-                if (optionalCapability.isPresent()) {
-                    var capability = optionalCapability.get();
-
-                    for (var entry : ((AccessoriesHolderImpl) capability.getHolder()).getSlotContainers().entrySet()) {
-                        var containerTag = inventory.getCompound("accessories:accessories").getCompound(entry.getKey());
-
-                        if (!containerTag.isEmpty()) {
-                            var accessoriesTag = containerTag.getList("accessories", Tag.TAG_COMPOUND);
-                            var cosmeticAccessoriesTag = containerTag.getList("cosmetic_accessories", Tag.TAG_COMPOUND);
-
-                            entry.getValue().getAccessories().fromTag(accessoriesTag, player.level().registryAccess());
-                            entry.getValue().getCosmeticAccessories().fromTag(cosmeticAccessoriesTag, player.level().registryAccess());
-                        } else {
-                            entry.getValue().getAccessories().clearContent();
-                            entry.getValue().getCosmeticAccessories().clearContent();
-                        }
-
-                        entry.getValue().update();
-                    }
-                }
-            }
-
-            if (FabricLoader.getInstance().isModLoaded("trinkets") && inventory.contains("trinkets:trinkets")) {
-                var component = TrinketsApi.getTrinketComponent(player);
-                component.ifPresent(trinketComponent -> trinketComponent.readFromNbt(inventory.getCompound("trinkets:trinkets"), player.level().registryAccess()));
-            }
-
-        } else if (ListTag.TYPE.equals(Objects.requireNonNull(inventories.get(id)).getType())) {
-            var inventory = inventories.getList(id, CompoundTag.TAG_COMPOUND);
-            player.getInventory().load(inventory);
-        }
+        player.getInventory().load(inventory.list("minecraft:inventory", ItemStackWithSlot.CODEC).get());
 
         if (remove) {
             inventories.remove(id);
@@ -152,13 +64,14 @@ public class MapUtilsSavedData extends SavedData {
         return true;
     }
 
-    @Override
-    public @NotNull CompoundTag save(CompoundTag compoundTag, HolderLookup.Provider provider) {
-        compoundTag.put("inventories", inventories);
-        compoundTag.put("paths", savePaths());
-        compoundTag.put("pets", savePets());
+    public @NotNull CompoundTag save() {
+        var tag = new CompoundTag();
 
-        return compoundTag;
+        tag.put("inventories", inventories);
+        tag.put("paths", savePaths());
+        tag.put("pets", savePets());
+
+        return tag;
     }
 
 
@@ -176,11 +89,11 @@ public class MapUtilsSavedData extends SavedData {
 
     @SuppressWarnings("unchecked")
     private void loadPets(CompoundTag tag) {
-        for (var key : tag.getAllKeys()) {
-            var listTag = tag.getList(key, ListTag.TAG_COMPOUND);
+        for (var entry : tag.entrySet()) {
+            var listTag = entry.getValue().asList().get();
             var list = new ArrayList<>(listTag);
 
-            pets.put(key, (List<CompoundTag>) (Object) list);
+            pets.put(entry.getKey(), (List<CompoundTag>) (Object) list);
         }
     }
 
@@ -195,33 +108,31 @@ public class MapUtilsSavedData extends SavedData {
     }
 
     public void loadPaths(CompoundTag pathsTag) {
-        for (var key : pathsTag.getAllKeys()) {
-            var list = pathsTag.getList(key, ListTag.TAG_COMPOUND);
-            paths.put(key, SplinePath.read(list));
+        for (var entry : pathsTag.entrySet()) {
+            var list = entry.getValue().asList().get();
+            paths.put(entry.getKey(), SplinePath.read(list));
         }
     }
 
-    public static MapUtilsSavedData load(CompoundTag compoundTag, HolderLookup.Provider provider) {
+    public static MapUtilsSavedData load(CompoundTag compoundTag) {
         var data = new MapUtilsSavedData();
 
-        data.inventories = compoundTag.getCompound("inventories");
-        data.loadPaths(compoundTag.getCompound("paths"));
-        data.loadPets(compoundTag.getCompound("pets"));
+        data.inventories = compoundTag.getCompound("inventories").get();
+        data.loadPaths(compoundTag.getCompound("paths").get());
+        data.loadPets(compoundTag.getCompound("pets").get());
 
         return data;
     }
 
     public static MapUtilsSavedData getServerData(MinecraftServer server) {
         DimensionDataStorage persistentStateManager = server.overworld().getDataStorage();
-        MapUtilsSavedData data = persistentStateManager.computeIfAbsent(factory, MapUtils.MOD_ID);
+        MapUtilsSavedData data = persistentStateManager.computeIfAbsent(TYPE);
         data.setDirty();
 
         return data;
     }
 
-    private static final SavedData.Factory<MapUtilsSavedData> factory = new SavedData.Factory<>(
-        MapUtilsSavedData::new,
-        MapUtilsSavedData::load,
-        null
-    );
+    private static final SavedDataType<MapUtilsSavedData> TYPE = new SavedDataType<>(MapUtils.MOD_ID, MapUtilsSavedData::new,
+        MapUtilsSavedData.CODEC,
+        null);
 }

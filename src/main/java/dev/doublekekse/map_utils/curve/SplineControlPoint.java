@@ -9,8 +9,8 @@ import net.minecraft.world.phys.Vec3;
 
 public record SplineControlPoint(Vec3 position, Vec2 rotation) {
     public static final StreamCodec<FriendlyByteBuf, SplineControlPoint> STREAM_CODEC = StreamCodec.composite(
-        AdditionalCodecs.VEC_3, SplineControlPoint::position,
-        AdditionalCodecs.VEC_2, SplineControlPoint::rotation,
+        AdditionalCodecs.VEC3_STREAM_CODEC, SplineControlPoint::position,
+        AdditionalCodecs.VEC2_STREAM_CODEC, SplineControlPoint::rotation,
         SplineControlPoint::new
     );
 
@@ -32,8 +32,8 @@ public record SplineControlPoint(Vec3 position, Vec2 rotation) {
     }
 
     public static SplineControlPoint read(CompoundTag tag) {
-        var position = new Vec3(tag.getDouble("x"), tag.getDouble("y"), tag.getDouble("z"));
-        var rotation = new Vec2(tag.getFloat("rotation_x"), tag.getFloat("rotation_y"));
+        var position = new Vec3(tag.getDouble("x").orElse(0.0), tag.getDouble("y").orElse(0.0), tag.getDouble("z").orElse(0.0));
+        var rotation = new Vec2(tag.getFloat("rotation_x").orElse(0f), tag.getFloat("rotation_y").orElse(0f));
 
         return new SplineControlPoint(position, rotation);
     }
