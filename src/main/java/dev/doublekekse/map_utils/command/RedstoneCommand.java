@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import dev.doublekekse.map_utils.block.VariableRedstoneBlock;
 import dev.doublekekse.map_utils.timer.CommandCallback;
+import dev.doublekekse.map_utils.timer.DeactivateBlockCallback;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.TimeArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
@@ -32,8 +33,7 @@ public class RedstoneCommand {
                         return -1;
                     }
 
-                    var command = "setblock ~ ~ ~ map_utils:variable_redstone_block";
-                    timerQueue.schedule(command, gameTime, new CommandCallback(level.dimension(), null, command, blockPos.getCenter(), Vec2.ZERO, 2));
+                    timerQueue.schedule("redstone callback", gameTime, new DeactivateBlockCallback(level.dimension(), blockPos));
 
                     level.setBlockAndUpdate(blockPos, VARIABLE_REDSTONE_BLOCK.defaultBlockState().setValue(VariableRedstoneBlock.POWER, power));
                     source.sendSuccess(() -> Component.translatable("commands.redstone.timed", blockPos.getX(), blockPos.getY(), blockPos.getZ(), power, timeOffset), true);

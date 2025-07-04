@@ -5,6 +5,7 @@ import dev.doublekekse.map_utils.packet.*;
 import dev.doublekekse.map_utils.registry.*;
 import dev.doublekekse.map_utils.state.CameraOverrideState;
 import dev.doublekekse.map_utils.timer.CommandCallback;
+import dev.doublekekse.map_utils.timer.DeactivateBlockCallback;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -35,6 +36,7 @@ public class MapUtils implements ModInitializer {
         CameraOverrideState.reset();
 
         TimerCallbacks.SERVER_CALLBACKS.register(id("command_callback"), CommandCallback.CODEC);
+        TimerCallbacks.SERVER_CALLBACKS.register(id("deactivate_block_callback"), DeactivateBlockCallback.CODEC);
 
         MapUtilsBlocks.register();
         MapUtilsBlockEntities.register();
