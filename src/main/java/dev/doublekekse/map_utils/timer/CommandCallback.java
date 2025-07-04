@@ -30,7 +30,7 @@ public record CommandCallback(ResourceKey<Level> dimension, @Nullable UUID entit
     implements TimerCallback<MinecraftServer> {
     public static final MapCodec<CommandCallback> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceKey.codec(Registries.DIMENSION).fieldOf("dimension").forGetter(CommandCallback::dimension),
-            AdditionalCodecs.UUID_CODEC.fieldOf("entity_uuid").forGetter(CommandCallback::entityUUID),
+            AdditionalCodecs.UUID_CODEC.optionalFieldOf("entity_uuid", null).forGetter(CommandCallback::entityUUID),
             Codec.STRING.fieldOf("command").forGetter(CommandCallback::command),
             Vec3.CODEC.fieldOf("position").forGetter(CommandCallback::position),
             Vec2.CODEC.fieldOf("rotation").forGetter(CommandCallback::rotation),
