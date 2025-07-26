@@ -41,7 +41,7 @@ public class MapUtilsBlocks {
         if (shouldRegisterItem) {
             var itemKey = ResourceKey.create(Registries.ITEM, MapUtils.id(path));
 
-            var blockItem = new BlockItem(block, new Item.Properties().setId(itemKey));
+            var blockItem = new BlockItem(block, new Item.Properties().useBlockDescriptionPrefix().setId(itemKey));
             Registry.register(BuiltInRegistries.ITEM, itemKey, blockItem);
         }
 
