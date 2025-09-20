@@ -9,6 +9,8 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.TimeArgument;
 import net.minecraft.network.chat.Component;
 
+import java.util.Optional;
+
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
 
@@ -25,7 +27,7 @@ public class ScheduleCommandExtension {
                 var command = StringArgumentType.getString(context, "command");
                 var timerQueue = source.getServer().getWorldData().overworldData().getScheduledEvents();
 
-                timerQueue.schedule(command, worldTime, new CommandCallback(level.dimension(), entity == null ? null : entity.getUUID(), command, source.getPosition(), source.getRotation(), ((CommandSourceStackDuck) source).mapUtils$permissionLevel()));
+                timerQueue.schedule(command, worldTime, new CommandCallback(level.dimension(), entity == null ? Optional.empty() : Optional.of(entity.getUUID()), command, source.getPosition(), source.getRotation(), ((CommandSourceStackDuck) source).mapUtils$permissionLevel()));
 
                 source.sendSuccess(() -> Component.translatable("commands.map_utils.schedule.created.command", command, timeOffset, worldTime), true);
                 return 1;

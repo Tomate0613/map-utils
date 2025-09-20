@@ -22,15 +22,16 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
 import java.util.UUID;
 
-public record CommandCallback(ResourceKey<Level> dimension, @Nullable UUID entityUUID,
+public record CommandCallback(ResourceKey<Level> dimension, @NotNull Optional<UUID> entityUUID,
                               String command, Vec3 position, Vec2 rotation,
                               int permissionLevel)
     implements TimerCallback<MinecraftServer> {
     public static final MapCodec<CommandCallback> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceKey.codec(Registries.DIMENSION).fieldOf("dimension").forGetter(CommandCallback::dimension),
-            AdditionalCodecs.UUID_CODEC.optionalFieldOf("entity_uuid", null).forGetter(CommandCallback::entityUUID),
+            AdditionalCodecs.UUID_CODEC.optionalFieldOf("entity_uuid").forGetter(CommandCallback::entityUUID),
             Codec.STRING.fieldOf("command").forGetter(CommandCallback::command),
             Vec3.CODEC.fieldOf("position").forGetter(CommandCallback::position),
             Vec2.CODEC.fieldOf("rotation").forGetter(CommandCallback::rotation),
@@ -45,7 +46,7 @@ public record CommandCallback(ResourceKey<Level> dimension, @Nullable UUID entit
             // TODO
             return;
         }
-        var entity = entityUUID == null ? null : level.getEntity(entityUUID);
+        var entity = entityUUID.isEmpty() ? null : level.getEntity(entityUUID.get());
         minecraftServer.getCommands().performPrefixedCommand(createCommandSourceStack(entity, level), command);
     }
 
