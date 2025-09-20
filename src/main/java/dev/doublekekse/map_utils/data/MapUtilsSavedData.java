@@ -3,6 +3,7 @@ package dev.doublekekse.map_utils.data;
 import com.mojang.serialization.Codec;
 import dev.doublekekse.map_utils.MapUtils;
 import dev.doublekekse.map_utils.curve.SplinePath;
+import dev.doublekekse.map_utils.duck.InventoryDuck;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.server.MinecraftServer;
@@ -38,6 +39,7 @@ public class MapUtilsSavedData extends SavedData {
     public void saveInventories(Player player, String id, boolean remove) {
         var inventory = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, player.level().registryAccess());
         player.getInventory().save(inventory.list("minecraft:inventory", ItemStackWithSlot.CODEC));
+        ((InventoryDuck)player.getInventory()).mapUtils$saveEquipment(inventory.list("minecraft:equipment", ItemStackWithSlot.CODEC));
 
         if (remove) {
             player.getInventory().clearContent();
@@ -47,14 +49,16 @@ public class MapUtilsSavedData extends SavedData {
         setDirty();
     }
 
-    @SuppressWarnings("UnstableApiUsage")
     public boolean loadInventories(Player player, String id, boolean remove) {
-        var inventory = TagValueInput.create(ProblemReporter.DISCARDING, player.level().registryAccess(), inventories.get(id).asCompound().get());
-        if (inventory == null) {
+        var tag = inventories.get(id);
+        if (tag == null || tag.asCompound().isEmpty()) {
             return false;
         }
 
-        player.getInventory().load(inventory.list("minecraft:inventory", ItemStackWithSlot.CODEC).get());
+        var inventory = TagValueInput.create(ProblemReporter.DISCARDING, player.level().registryAccess(), tag.asCompound().get());
+
+        inventory.list("minecraft:inventory", ItemStackWithSlot.CODEC).ifPresent(itemStackWithSlots -> player.getInventory().load(itemStackWithSlots));
+        inventory.list("minecraft:equipment", ItemStackWithSlot.CODEC).ifPresent(itemStackWithSlots -> ((InventoryDuck) player.getInventory()).mapUtils$loadEquipment(itemStackWithSlots));
 
         if (remove) {
             inventories.remove(id);
