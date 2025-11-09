@@ -65,7 +65,7 @@ public class TimerBlockEntity extends BlockEntity {
     }
 
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, TimerBlockEntity instance) {
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             return;
         }
 

@@ -4,7 +4,7 @@ import dev.doublekekse.map_utils.client.MapUtilsClient;
 import dev.doublekekse.map_utils.curve.SplinePath;
 import dev.doublekekse.map_utils.packet.ServerboundModifyControlPointPacket;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;

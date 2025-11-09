@@ -1,7 +1,7 @@
 package dev.doublekekse.map_utils.gizmo;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.debug.DebugRenderer;
 import net.minecraft.core.Direction;
@@ -43,7 +43,7 @@ public class Gizmo {
     }
 
     void drawLine(WorldRenderContext ctx, PoseStack.Pose pose, Vector3f offset, int color) {
-        var normal = ctx.camera().getLookVector().mul(-1);
+        var normal = ctx.worldState().cameraRenderState.orientation.transform(new Vector3f(0, 0, -1)).mul(-1);
         var lineConsumer = ctx.consumers().getBuffer(RenderType.LINES);
 
         var fPos = position.toVector3f();
@@ -72,7 +72,7 @@ public class Gizmo {
     }
 
     public void render(WorldRenderContext ctx, boolean isActive) {
-        var poseStack = ctx.matrixStack();
+        var poseStack = ctx.matrices();
         var pose = poseStack.last();
         var aabb = getAABB();
 

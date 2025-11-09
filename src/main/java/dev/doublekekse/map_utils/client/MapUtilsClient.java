@@ -10,7 +10,7 @@ import dev.doublekekse.map_utils.packet.handler.ClickEventHandler;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
 import net.minecraft.client.Minecraft;
 
 public class MapUtilsClient implements ClientModInitializer {
@@ -38,7 +38,7 @@ public class MapUtilsClient implements ClientModInitializer {
                 return;
             }
 
-            var poseStack = ctx.matrixStack();
+            var poseStack = ctx.matrices();
 
             if (poseStack == null) {
                 return;
@@ -46,7 +46,7 @@ public class MapUtilsClient implements ClientModInitializer {
 
             poseStack.pushPose();
 
-            var cPos = ctx.camera().getPosition();
+            var cPos = ctx.worldState().cameraRenderState.pos;
             poseStack.translate(-cPos.x, -cPos.y, -cPos.z);
 
             PathRenderer.render(ctx);

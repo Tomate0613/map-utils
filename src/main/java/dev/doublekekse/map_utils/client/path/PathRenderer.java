@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.doublekekse.map_utils.client.MapUtilsClient;
 import dev.doublekekse.map_utils.curve.SplineControlPoint;
 import dev.doublekekse.map_utils.curve.SplinePath;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.RenderType;
@@ -26,9 +26,9 @@ public class PathRenderer {
 
     public static void renderPath(WorldRenderContext ctx, SplinePath path, String id) {
         var lineConsumer = ctx.consumers().getBuffer(RenderType.LINES);
-        var poseStack = ctx.matrixStack();
+        var poseStack = ctx.matrices();
         var pose = poseStack.last();
-        var normal = ctx.camera().getLookVector().mul(-1);
+        var normal = ctx.worldState().cameraRenderState.orientation.transform(new Vector3f(0, 0, -1)).mul(-1);
 
         renderLine(path, pose, lineConsumer, normal);
 
@@ -75,7 +75,7 @@ public class PathRenderer {
     static void renderControlPointText(SplineControlPoint controlPoint, String text, PoseStack poseStack, WorldRenderContext ctx) {
         poseStack.pushPose();
         poseStack.translate(controlPoint.position().x, controlPoint.position().y, controlPoint.position().z);
-        poseStack.mulPose(ctx.camera().rotation().mul(-1));
+        poseStack.mulPose(ctx.worldState().cameraRenderState.orientation.mul(-1));
         poseStack.scale(.01f, -.01f, .01f);
 
         var font = Minecraft.getInstance().font;

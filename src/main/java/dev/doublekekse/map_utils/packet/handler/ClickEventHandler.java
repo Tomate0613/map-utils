@@ -21,7 +21,7 @@ public class ClickEventHandler {
             case SUGGEST_COMMAND -> {
                 minecraft.setScreen(new ConfirmScreen((bool) -> {
                     if (bool) {
-                        minecraft.setScreen(new ChatScreen(packet.value()));
+                        minecraft.setScreen(new ChatScreen(packet.value(), false));
                     } else {
                         minecraft.setScreen(null);
                     }
