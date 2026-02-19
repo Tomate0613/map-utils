@@ -39,7 +39,7 @@ public class MapUtilsSavedData extends SavedData {
     public void saveInventories(Player player, String id, boolean remove) {
         var inventory = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, player.level().registryAccess());
         player.getInventory().save(inventory.list("minecraft:inventory", ItemStackWithSlot.CODEC));
-        ((InventoryDuck)player.getInventory()).mapUtils$saveEquipment(inventory.list("minecraft:equipment", ItemStackWithSlot.CODEC));
+        ((InventoryDuck) player.getInventory()).mapUtils$saveEquipment(inventory.list("minecraft:equipment", ItemStackWithSlot.CODEC));
 
         if (remove) {
             player.getInventory().clearContent();
@@ -129,14 +129,14 @@ public class MapUtilsSavedData extends SavedData {
     }
 
     public static MapUtilsSavedData getServerData(MinecraftServer server) {
-        DimensionDataStorage persistentStateManager = server.overworld().getDataStorage();
-        MapUtilsSavedData data = persistentStateManager.computeIfAbsent(TYPE);
+        var storage = server.overworld().getDataStorage();
+        var data = storage.computeIfAbsent(TYPE);
         data.setDirty();
 
         return data;
     }
 
-    private static final SavedDataType<MapUtilsSavedData> TYPE = new SavedDataType<>(MapUtils.MOD_ID, MapUtilsSavedData::new,
+    private static final SavedDataType<MapUtilsSavedData> TYPE = new SavedDataType<>(MapUtils.id(MapUtils.MOD_ID), MapUtilsSavedData::new,
         MapUtilsSavedData.CODEC,
         null);
 }

@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import dev.doublekekse.map_utils.data.MapUtilsSavedData;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -24,7 +25,7 @@ public class PetsCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
-            literal("pets").requires(source -> source.hasPermission(2))
+            literal("pets").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(literal("store").then(argument("player", EntityArgument.player()).then(argument("id", StringArgumentType.string()).executes(ctx -> {
                         var player = EntityArgument.getPlayer(ctx, "player");
                         var id = player.getStringUUID() + "-" + StringArgumentType.getString(ctx, "id");

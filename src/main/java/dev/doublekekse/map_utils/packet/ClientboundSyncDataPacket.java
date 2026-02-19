@@ -3,7 +3,7 @@ package dev.doublekekse.map_utils.packet;
 import dev.doublekekse.map_utils.MapUtils;
 import dev.doublekekse.map_utils.client.MapUtilsClient;
 import dev.doublekekse.map_utils.data.MapUtilsSavedData;
-import dev.doublekekse.map_utils.gizmo.Gizmos;
+import dev.doublekekse.map_utils.gizmo.PathGizmos;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -35,6 +35,6 @@ public record ClientboundSyncDataPacket(MapUtilsSavedData savedData) implements 
 
     public static void handle(ClientboundSyncDataPacket packet, ClientPlayNetworking.Context context) {
         MapUtilsClient.clientSavedData = packet.savedData;
-        Gizmos.update();
+        PathGizmos.update();
     }
 }

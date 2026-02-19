@@ -2,7 +2,7 @@ package dev.doublekekse.map_utils.mixin;
 
 import dev.doublekekse.map_utils.client.MapUtilsClient;
 import dev.doublekekse.map_utils.gizmo.Gizmo;
-import dev.doublekekse.map_utils.gizmo.Gizmos;
+import dev.doublekekse.map_utils.gizmo.PathGizmos;
 import dev.doublekekse.map_utils.state.CameraOverrideState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
@@ -32,8 +32,8 @@ public abstract class MinecraftMixin
     @Shadow
     private int rightClickDelay;
 
-    public MinecraftMixin(String string) {
-        super(string);
+    public MinecraftMixin(String name, boolean propagatesCrashes) {
+        super(name, propagatesCrashes);
     }
 
     @Inject(method = "disconnect", at = @At("HEAD"))
@@ -49,7 +49,7 @@ public abstract class MinecraftMixin
     @Inject(method = "handleKeybinds", at = @At("HEAD"))
     void handleKeybinds(CallbackInfo ci) {
         if (!options.keyUse.isDown()) {
-            Gizmos.transformation = null;
+            PathGizmos.transformation = null;
         }
     }
 
@@ -64,18 +64,18 @@ public abstract class MinecraftMixin
         var pos = player.getEyePosition();
         var end = pos.add(player.getLookAngle().scale(3));
 
-        if (Gizmos.transformation != null) {
-            Gizmos.transformation.apply(player);
+        if (PathGizmos.transformation != null) {
+            PathGizmos.transformation.apply(player);
             ci.cancel();
             return;
         }
 
-        if (Gizmos.selectedGizmo != null) {
-            var gizmo = Gizmos.selectedGizmo;
+        if (PathGizmos.selectedGizmo != null) {
+            var gizmo = PathGizmos.selectedGizmo;
             var gizmoTransformation = gizmo.transformation(pos, end);
 
             if (gizmoTransformation.isPresent()) {
-                Gizmos.transformation = gizmoTransformation.get();
+                PathGizmos.transformation = gizmoTransformation.get();
                 ci.cancel();
                 return;
             }
@@ -85,7 +85,7 @@ public abstract class MinecraftMixin
             for (var axis : axes) {
                 var axisTransformation = axis.transformation(pos, end);
                 if (axisTransformation.isPresent()) {
-                    Gizmos.transformation = axisTransformation.get();
+                    PathGizmos.transformation = axisTransformation.get();
                     ci.cancel();
                     return;
                 }
@@ -94,10 +94,10 @@ public abstract class MinecraftMixin
 
         Vec3 closest = null;
         Gizmo closestGizmo = null;
-        Gizmos.selectedGizmo = null;
-        Gizmos.transformation = null;
+        PathGizmos.selectedGizmo = null;
+        PathGizmos.transformation = null;
 
-        for (var gizmo : Gizmos.gizmos) {
+        for (var gizmo : PathGizmos.gizmos) {
             var intersection = gizmo.getAABB().clip(pos, end);
             if (intersection.isPresent()) {
                 if (closest == null || intersection.get().lengthSqr() < closest.lengthSqr()) {
@@ -111,7 +111,7 @@ public abstract class MinecraftMixin
             return;
         }
 
-        Gizmos.selectedGizmo = closestGizmo;
+        PathGizmos.selectedGizmo = closestGizmo;
         rightClickDelay = 3;
         ci.cancel();
 

@@ -10,6 +10,7 @@ import dev.doublekekse.map_utils.curve.SplinePath;
 import dev.doublekekse.map_utils.data.MapUtilsSavedData;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.TimeArgument;
 import net.minecraft.network.chat.Component;
@@ -17,9 +18,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec2;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
@@ -37,7 +36,7 @@ public class PathCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
-            literal("path").requires(source -> source.hasPermission(2))
+            literal("path").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(literal("apply").then(argument("entity", EntityArgument.entity()).then(argument("duration", TimeArgument.time(1)).then(argument("path", PathArgumentType.path()).executes(ctx -> {
                     var entity = EntityArgument.getEntity(ctx, "entity");
                     var path = PathArgumentType.getPath(ctx, "path");

@@ -14,12 +14,14 @@ public class AdditionalCodecs {
     public static final StreamCodec<FriendlyByteBuf, Vec3> VEC3_STREAM_CODEC = new StreamCodec<>() {
         @Override
         public @NotNull Vec3 decode(FriendlyByteBuf byteBuf) {
-            return byteBuf.readVec3();
+            return new Vec3(byteBuf.readDouble(), byteBuf.readDouble(), byteBuf.readDouble());
         }
 
         @Override
         public void encode(FriendlyByteBuf byteBuf, Vec3 vec3) {
-            byteBuf.writeVec3(vec3);
+            byteBuf.writeDouble(vec3.x);
+            byteBuf.writeDouble(vec3.y);
+            byteBuf.writeDouble(vec3.z);
         }
     };
 

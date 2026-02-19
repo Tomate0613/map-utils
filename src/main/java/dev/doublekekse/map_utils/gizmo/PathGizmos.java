@@ -4,18 +4,18 @@ import dev.doublekekse.map_utils.client.MapUtilsClient;
 import dev.doublekekse.map_utils.curve.SplinePath;
 import dev.doublekekse.map_utils.packet.ServerboundModifyControlPointPacket;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Gizmos {
+public class PathGizmos {
     public static List<Gizmo> gizmos = new ArrayList<>();
     public static @Nullable Gizmo selectedGizmo = null;
     public static @Nullable GizmoTransformation transformation = null;
 
-    public static void render(WorldRenderContext ctx) {
+    public static void render(LevelRenderContext ctx) {
         for (var gizmo : gizmos) {
             gizmo.render(ctx, gizmo == selectedGizmo);
         }
@@ -36,7 +36,7 @@ public class Gizmos {
         for (int i = 0; i < controlPoints.size(); i++) {
             int finalI = i;
             var controlPoint = controlPoints.get(finalI);
-            Gizmos.gizmos.add(Gizmo.bind(controlPoint::position, (pos) -> {
+            PathGizmos.gizmos.add(Gizmo.bind(controlPoint::position, (pos) -> {
                 var newControlPoint = controlPoint.withPosition(pos);
                 controlPoints.set(finalI, newControlPoint);
                 ClientPlayNetworking.send(new ServerboundModifyControlPointPacket(id, finalI, newControlPoint));

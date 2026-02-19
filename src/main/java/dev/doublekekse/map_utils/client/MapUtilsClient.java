@@ -3,14 +3,14 @@ package dev.doublekekse.map_utils.client;
 import dev.doublekekse.map_utils.client.path.PathRenderer;
 import dev.doublekekse.map_utils.command.ClientPathEditorCommand;
 import dev.doublekekse.map_utils.data.MapUtilsSavedData;
-import dev.doublekekse.map_utils.gizmo.Gizmos;
+import dev.doublekekse.map_utils.gizmo.PathGizmos;
 import dev.doublekekse.map_utils.packet.*;
 import dev.doublekekse.map_utils.packet.handler.CameraHandlers;
 import dev.doublekekse.map_utils.packet.handler.ClickEventHandler;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.minecraft.client.Minecraft;
 
 public class MapUtilsClient implements ClientModInitializer {
@@ -31,14 +31,14 @@ public class MapUtilsClient implements ClientModInitializer {
             ClientPathEditorCommand.register(dispatcher);
         });
 
-        WorldRenderEvents.AFTER_ENTITIES.register((ctx) -> {
+        LevelRenderEvents.BEFORE_GIZMOS.register((ctx) -> {
             var gameMode = Minecraft.getInstance().gameMode;
 
             if (!MapUtilsClient.pathEditorEnabled || gameMode == null || gameMode.getPlayerMode().isSurvival()) {
                 return;
             }
 
-            var poseStack = ctx.matrices();
+            var poseStack = ctx.poseStack();
 
             if (poseStack == null) {
                 return;
@@ -46,11 +46,11 @@ public class MapUtilsClient implements ClientModInitializer {
 
             poseStack.pushPose();
 
-            var cPos = ctx.worldState().cameraRenderState.pos;
+            var cPos = ctx.levelState().cameraRenderState.pos;
             poseStack.translate(-cPos.x, -cPos.y, -cPos.z);
 
             PathRenderer.render(ctx);
-            Gizmos.render(ctx);
+            PathGizmos.render(ctx);
 
 
             poseStack.popPose();

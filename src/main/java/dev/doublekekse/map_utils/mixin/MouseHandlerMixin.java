@@ -1,6 +1,6 @@
 package dev.doublekekse.map_utils.mixin;
 
-import dev.doublekekse.map_utils.gizmo.Gizmos;
+import dev.doublekekse.map_utils.gizmo.PathGizmos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import org.spongepowered.asm.mixin.Final;
@@ -22,11 +22,11 @@ public class MouseHandlerMixin {
         boolean discreteMouseScroll = this.minecraft.options.discreteMouseScroll().get();
         double scroll = (discreteMouseScroll ? Math.signum(e) : e) * sensitivity;
 
-        if(Gizmos.selectedGizmo != null) {
+        if(PathGizmos.selectedGizmo != null) {
             ci.cancel();
 
             var direction = Minecraft.getInstance().player.getNearestViewDirection();
-            Gizmos.selectedGizmo.scroll(direction, scroll);
+            PathGizmos.selectedGizmo.scroll(direction, scroll);
         }
     }
 }

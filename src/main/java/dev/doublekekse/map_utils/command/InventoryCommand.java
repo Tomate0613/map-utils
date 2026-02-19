@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import dev.doublekekse.map_utils.data.MapUtilsSavedData;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 
@@ -15,7 +16,7 @@ public class InventoryCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
-            literal("inv").requires(source -> source.hasPermission(2))
+            literal("inv").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(literal("save").then(argument("player", EntityArgument.player()).then(argument("save", StringArgumentType.string()).then(argument("remove", BoolArgumentType.bool()).executes(context -> {
                         var save = StringArgumentType.getString(context, "save");
                         var isGlobal = save.charAt(0) == '+';

@@ -7,6 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.doublekekse.map_utils.packet.ClickEventPacket;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
@@ -22,7 +23,7 @@ public class ClickEventCommand {
         var copy = argument("player", EntityArgument.player()).then(argument("value", StringArgumentType.greedyString()).executes(context -> handle(context, ClickEvent.Action.COPY_TO_CLIPBOARD)));
 
         dispatcher.register(
-            literal("clickevent").requires(source -> source.hasPermission(2))
+            literal("clickevent").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(literal("open_url").then(openUrl))
                 .then(literal("open_file").then(openFile))
                 .then(literal("suggest_command").then(suggestCommand))

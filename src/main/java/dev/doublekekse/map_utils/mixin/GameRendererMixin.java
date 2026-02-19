@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import dev.doublekekse.map_utils.state.CameraOverrideState;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.world.level.GameType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,14 +25,14 @@ public class GameRendererMixin {
     }
 
     @Inject(method = "bobView", at = @At("HEAD"), cancellable = true)
-    void bobView(PoseStack poseStack, float f, CallbackInfo ci) {
+    void bobView(CameraRenderState cameraState, PoseStack poseStack, CallbackInfo ci) {
         if (CameraOverrideState.position != null) {
             ci.cancel();
         }
     }
 
     @Inject(method = "bobHurt", at = @At("HEAD"), cancellable = true)
-    void bobHurt(PoseStack poseStack, float f, CallbackInfo ci) {
+    void bobHurt(CameraRenderState cameraState, PoseStack poseStack, CallbackInfo ci) {
         if (CameraOverrideState.position != null) {
             ci.cancel();
         }

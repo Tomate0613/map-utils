@@ -1,7 +1,7 @@
 package dev.doublekekse.map_utils.state;
 
 import dev.doublekekse.map_utils.curve.SplinePath;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 
@@ -18,7 +18,7 @@ public class CameraOverrideState {
     public static int splineDuration;
     public static int splineTicks;
 
-    public static ResourceLocation overlayLocation;
+    public static Identifier overlayLocation;
     public static float overlayOpacity;
 
     public static void reset() {

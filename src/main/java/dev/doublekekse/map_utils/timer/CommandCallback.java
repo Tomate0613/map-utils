@@ -13,6 +13,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.permissions.LevelBasedPermissionSet;
+import net.minecraft.server.permissions.PermissionLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.timers.TimerCallback;
@@ -26,16 +28,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 public record CommandCallback(ResourceKey<Level> dimension, @NotNull Optional<UUID> entityUUID,
-                              String command, Vec3 position, Vec2 rotation,
-                              int permissionLevel)
+                              String command, Vec3 position, Vec2 rotation)
     implements TimerCallback<MinecraftServer> {
     public static final MapCodec<CommandCallback> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             ResourceKey.codec(Registries.DIMENSION).fieldOf("dimension").forGetter(CommandCallback::dimension),
             AdditionalCodecs.UUID_CODEC.optionalFieldOf("entity_uuid").forGetter(CommandCallback::entityUUID),
             Codec.STRING.fieldOf("command").forGetter(CommandCallback::command),
             Vec3.CODEC.fieldOf("position").forGetter(CommandCallback::position),
-            Vec2.CODEC.fieldOf("rotation").forGetter(CommandCallback::rotation),
-            Codec.INT.fieldOf("permission_level").forGetter(CommandCallback::permissionLevel)
+            Vec2.CODEC.fieldOf("rotation").forGetter(CommandCallback::rotation)
         ).apply(instance, CommandCallback::new)
     );
 
@@ -61,7 +61,7 @@ public record CommandCallback(ResourceKey<Level> dimension, @NotNull Optional<UU
         }
 
         // TODO
-        var stack = new CommandSourceStack(CommandSource.NULL, position, rotation, level, permissionLevel, name, nameComponent, level.getServer(), entity);
+        var stack = new CommandSourceStack(CommandSource.NULL, position, rotation, level, LevelBasedPermissionSet.forLevel(PermissionLevel.GAMEMASTERS), name, nameComponent, level.getServer(), entity);
 
         if (FabricLoader.getInstance().isModLoaded("player_roles")) {
             PlayerRoleCompatibility.applyCommandIdentityType(stack);

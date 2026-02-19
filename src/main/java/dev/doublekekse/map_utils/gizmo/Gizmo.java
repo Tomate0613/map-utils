@@ -1,10 +1,11 @@
 package dev.doublekekse.map_utils.gizmo;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.debug.DebugRenderer;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.core.Direction;
+import net.minecraft.gizmos.GizmoStyle;
+import net.minecraft.gizmos.Gizmos;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
@@ -42,14 +43,14 @@ public class Gizmo {
         onPositionChange.accept(position);
     }
 
-    void drawLine(WorldRenderContext ctx, PoseStack.Pose pose, Vector3f offset, int color) {
-        var normal = ctx.worldState().cameraRenderState.orientation.transform(new Vector3f(0, 0, -1)).mul(-1);
-        var lineConsumer = ctx.consumers().getBuffer(RenderType.LINES);
+    void drawLine(LevelRenderContext ctx, PoseStack.Pose pose, Vector3f offset, int color) {
+        var normal = ctx.levelState().cameraRenderState.orientation.transform(new Vector3f(0, 0, -1)).mul(-1);
+        var lineConsumer = ctx.bufferSource().getBuffer(RenderTypes.LINES);
 
         var fPos = position.toVector3f();
 
-        lineConsumer.addVertex(pose, fPos).setColor(color).setNormal(pose, normal.x, normal.y, normal.z);
-        lineConsumer.addVertex(pose, fPos.add(offset)).setColor(color).setNormal(pose, normal.x, normal.y, normal.z);
+        lineConsumer.addVertex(pose, fPos).setColor(color).setNormal(pose, normal.x, normal.y, normal.z).setLineWidth(2.5f);
+        lineConsumer.addVertex(pose, fPos.add(offset)).setColor(color).setNormal(pose, normal.x, normal.y, normal.z).setLineWidth(2.5f);
     }
 
     public AABB getAABB() {
@@ -71,12 +72,12 @@ public class Gizmo {
         return getAABB().clip(pos, end).map(intersection -> GizmoTransformation.of(this, null, intersection, pos));
     }
 
-    public void render(WorldRenderContext ctx, boolean isActive) {
-        var poseStack = ctx.matrices();
+    public void render(LevelRenderContext ctx, boolean isActive) {
+        var poseStack = ctx.poseStack();
         var pose = poseStack.last();
         var aabb = getAABB();
 
-        DebugRenderer.renderFilledBox(poseStack, ctx.consumers(), aabb, 1, isActive ? 0 : 1, 1, 1);
+        Gizmos.cuboid(aabb, new GizmoStyle(0, 0, isActive ? 0xff00ffff : 0xffffffff));
 
         if (!isActive) {
             return;

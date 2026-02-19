@@ -3,10 +3,10 @@ package dev.doublekekse.map_utils.mixin;
 import dev.doublekekse.map_utils.curve.SplinePath;
 import dev.doublekekse.map_utils.state.CameraOverrideState;
 import net.minecraft.client.Camera;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.BlockGetter;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -29,10 +29,12 @@ public abstract class CameraMixin {
     private Vec3 position;
 
     @Shadow
-    public abstract float getXRot();
+    public abstract float getCameraEntityPartialTicks(DeltaTracker deltaTracker);
 
     @Shadow
-    public abstract float getYRot();
+    private float yRot;
+    @Shadow
+    private float xRot;
 
     @Unique
     Vec3 oldCameraPosition;
@@ -47,13 +49,14 @@ public abstract class CameraMixin {
     @Unique
     private static Vec2 overrideRotation;
 
-    @Inject(method = "setup", at = @At("TAIL"))
-    void setup(BlockGetter blockGetter, Entity entity, boolean bl, boolean bl2, float timeSinceLastTick, CallbackInfo ci) {
-        lastTimeSinceLastTick = timeSinceLastTick;
+    @Inject(method = "update", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Camera;hudFov:F", shift = At.Shift.AFTER, opcode = Opcodes.PUTFIELD))
+    void setup(DeltaTracker deltaTracker, CallbackInfo ci) {
+        float partialTicks = getCameraEntityPartialTicks(deltaTracker);
+        lastTimeSinceLastTick = partialTicks;
 
-        tickPath(timeSinceLastTick);
-        tickPosition(timeSinceLastTick);
-        tickRotation(timeSinceLastTick);
+        tickPath(partialTicks);
+        tickPosition(partialTicks);
+        tickRotation(partialTicks);
     }
 
     @Unique
@@ -133,7 +136,7 @@ public abstract class CameraMixin {
         }
 
         if (oldCameraRotation == null) {
-            oldCameraRotation = new Vec2(getXRot(), getYRot());
+            oldCameraRotation = new Vec2(yRot, xRot);
         }
 
         CameraOverrideState.splineTicks++;

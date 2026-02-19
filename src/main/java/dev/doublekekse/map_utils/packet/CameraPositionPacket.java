@@ -12,7 +12,7 @@ public record CameraPositionPacket(Vec3 position, boolean interpolate) implement
     public static final CustomPacketPayload.Type<CameraPositionPacket> TYPE = new CustomPacketPayload.Type<>(MapUtils.id("camera_position_packet"));
 
     CameraPositionPacket(FriendlyByteBuf buf) {
-        this(buf.readNullable((a) -> a.readVec3()), buf.readBoolean());
+        this(buf.readNullable((a) -> new Vec3(a.readDouble(), a.readDouble(), a.readDouble())), buf.readBoolean());
     }
 
     @Override
@@ -21,7 +21,12 @@ public record CameraPositionPacket(Vec3 position, boolean interpolate) implement
     }
 
     public void write(FriendlyByteBuf buf) {
-        buf.writeNullable(position, (a, b) -> a.writeVec3(b));
+        buf.writeNullable(position, (a, b) -> {
+            a.writeDouble(b.x);
+            a.writeDouble(b.y);
+            a.writeDouble(b.z);
+        });
+
         buf.writeBoolean(interpolate);
     }
 }

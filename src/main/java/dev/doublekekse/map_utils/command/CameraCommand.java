@@ -9,11 +9,12 @@ import dev.doublekekse.map_utils.command.argument.PathArgumentType;
 import dev.doublekekse.map_utils.packet.*;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.TimeArgument;
 import net.minecraft.commands.arguments.coordinates.RotationArgument;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec2;
 
@@ -25,7 +26,7 @@ public class CameraCommand {
 
         dispatcher.register(
             literal("camera")
-                .then(literal("fov").requires(source -> source.hasPermission(2))
+                .then(literal("fov").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                     .then(literal("reset").executes(context -> {
                         if (context.getSource().getPlayer() == null) {
                             context.getSource().sendFailure(Component.translatable("commands.map_utils.camera.no_player"));
@@ -49,7 +50,7 @@ public class CameraCommand {
 
                         return 1;
                     }))))
-                ).then(literal("overlay").requires(source -> source.hasPermission(2))
+                ).then(literal("overlay").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                     .then(literal("reset").executes(context -> {
                         if (context.getSource().getPlayer() == null) {
                             context.getSource().sendFailure(Component.translatable("commands.map_utils.camera.no_player"));
@@ -61,7 +62,7 @@ public class CameraCommand {
 
                         return 1;
                     })).then(literal("set").then(argument("overlayTexture", StringArgumentType.string()).then(argument("overlayOpacity", FloatArgumentType.floatArg(0, 1)).executes(context -> {
-                        var overlayLocation = ResourceLocation.parse(StringArgumentType.getString(context, "overlayTexture"));
+                        var overlayLocation = Identifier.parse(StringArgumentType.getString(context, "overlayTexture"));
                         var overlayOpacity = FloatArgumentType.getFloat(context, "overlayOpacity");
 
                         if (context.getSource().getPlayer() == null) {
@@ -74,7 +75,7 @@ public class CameraCommand {
 
                         return 1;
                     }))))
-                ).then(literal("position").requires(source -> source.hasPermission(2))
+                ).then(literal("position").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                     .then(literal("reset").executes(context -> {
                         if (context.getSource().getPlayer() == null) {
                             context.getSource().sendSuccess(() -> Component.translatable("commands.map_utils.camera.no_player"), false);
@@ -99,7 +100,7 @@ public class CameraCommand {
 
                         return 1;
                     }))))
-                ).then(literal("rotation").requires(source -> source.hasPermission(2))
+                ).then(literal("rotation").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                     .then(literal("reset").executes(context -> {
                         if (context.getSource().getPlayer() == null) {
                             context.getSource().sendFailure(Component.translatable("commands.map_utils.camera.no_player"));
@@ -125,7 +126,7 @@ public class CameraCommand {
 
                         return 1;
                     }))))
-                ).then(literal("path").requires(source -> source.hasPermission(2))
+                ).then(literal("path").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                     .then(literal("reset").executes(context -> {
                         if (context.getSource().getPlayer() == null) {
                             context.getSource().sendFailure(Component.translatable("commands.map_utils.camera.no_player"));

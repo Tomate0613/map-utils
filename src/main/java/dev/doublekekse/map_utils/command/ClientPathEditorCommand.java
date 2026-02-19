@@ -5,7 +5,7 @@ import dev.doublekekse.map_utils.client.MapUtilsClient;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.network.chat.Component;
 
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal;
 
 public class ClientPathEditorCommand {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {

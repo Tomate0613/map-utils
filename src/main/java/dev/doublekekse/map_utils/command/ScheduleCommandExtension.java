@@ -3,9 +3,9 @@ package dev.doublekekse.map_utils.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import dev.doublekekse.map_utils.duck.CommandSourceStackDuck;
 import dev.doublekekse.map_utils.timer.CommandCallback;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.TimeArgument;
 import net.minecraft.network.chat.Component;
 
@@ -18,16 +18,16 @@ public class ScheduleCommandExtension {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
-            literal("schedule").then(literal("command").then(argument("time", TimeArgument.time()).then(argument("command", StringArgumentType.greedyString()).executes(context -> {
+            literal("schedule").then(literal("command").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS)).then(argument("time", TimeArgument.time()).then(argument("command", StringArgumentType.greedyString()).executes(context -> {
                 var source = context.getSource();
                 var entity = source.getEntity();
                 var level = source.getLevel();
                 var timeOffset = IntegerArgumentType.getInteger(context, "time");
                 var worldTime = source.getLevel().getGameTime() + timeOffset;
                 var command = StringArgumentType.getString(context, "command");
-                var timerQueue = source.getServer().getWorldData().overworldData().getScheduledEvents();
+                var timerQueue = source.getServer().getScheduledEvents();
 
-                timerQueue.schedule(command, worldTime, new CommandCallback(level.dimension(), entity == null ? Optional.empty() : Optional.of(entity.getUUID()), command, source.getPosition(), source.getRotation(), ((CommandSourceStackDuck) source).mapUtils$permissionLevel()));
+                timerQueue.schedule(command, worldTime, new CommandCallback(level.dimension(), entity == null ? Optional.empty() : Optional.of(entity.getUUID()), command, source.getPosition(), source.getRotation()));
 
                 source.sendSuccess(() -> Component.translatable("commands.map_utils.schedule.created.command", command, timeOffset, worldTime), true);
                 return 1;
