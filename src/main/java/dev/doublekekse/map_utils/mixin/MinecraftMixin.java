@@ -36,7 +36,7 @@ public abstract class MinecraftMixin
         super(name, propagatesCrashes);
     }
 
-    @Inject(method = "disconnect", at = @At("HEAD"))
+    @Inject(method = "disconnect(Lnet/minecraft/client/gui/screens/Screen;ZZ)V", at = @At("HEAD"))
     void disconnect(CallbackInfo ci) {
         CameraOverrideState.reset();
     }
