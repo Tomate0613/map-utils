@@ -3,12 +3,13 @@ package dev.doublekekse.map_utils.client.screen;
 import dev.doublekekse.map_utils.block.timer.TimerBlockEntity;
 import dev.doublekekse.map_utils.packet.SetTimerBlockPacket;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Checkbox;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import org.jspecify.annotations.NonNull;
 
 public class TimerEditScreen extends Screen {
     int duration;
@@ -59,9 +60,6 @@ public class TimerEditScreen extends Screen {
     protected void init() {
         super.init();
 
-
-        assert minecraft != null;
-
         durationInput = new EditBox(minecraft.font, this.width / 2 - 100, 20, 200, 20, Component.translatable("gui.map_utils.timer.duration"));
         durationInput.setValue(String.valueOf(duration));
         intervalInput = new EditBox(minecraft.font, this.width / 2 - 100, 60, 200, 20, Component.translatable("gui.map_utils.timer.interval"));
@@ -75,11 +73,11 @@ public class TimerEditScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int x, int y, float pTicks) {
-        super.render(graphics, x, y, pTicks);
+    public void extractRenderState(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractRenderState(graphics, mouseX, mouseY, a);
 
-        graphics.drawString(this.font, Component.translatable("gui.map_utils.timer.duration.label"), this.width / 2 - 100, 10, 10526880);
-        graphics.drawString(this.font, Component.translatable("gui.map_utils.timer.interval.label"), this.width / 2 - 100, 50, 10526880);
-        graphics.drawString(this.font, Component.translatable("gui.map_utils.timer.tick_unloaded.label"), this.width / 2 - 100, 90, 10526880);
+        graphics.text(this.font, Component.translatable("gui.map_utils.timer.duration.label"), this.width / 2 - 100, 10, 10526880);
+        graphics.text(this.font, Component.translatable("gui.map_utils.timer.interval.label"), this.width / 2 - 100, 50, 10526880);
+        graphics.text(this.font, Component.translatable("gui.map_utils.timer.tick_unloaded.label"), this.width / 2 - 100, 90, 10526880);
     }
 }
