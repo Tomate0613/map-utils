@@ -68,7 +68,23 @@ public class InventoryCommand {
                     }
 
                     return 1;
-                })
-        ));
+                })).then(literal("query").then(argument("player", EntityArgument.player()).then(argument("save", StringArgumentType.string()).executes(context -> {
+                    var save = StringArgumentType.getString(context, "save");
+                    var isGlobal = save.charAt(0) == '+';
+                    var player = EntityArgument.getPlayer(context, "player");
+                    var data = MapUtilsSavedData.getServerData(context.getSource().getServer());
+
+                    if (!isGlobal) {
+                        save = player.getStringUUID() + "-" + save;
+                    }
+                    var finalSave = save;
+
+                    var has = data.hasInventories(save);
+
+                    context.getSource().sendSuccess(() -> Component.translatable("commands.map_utils.inventory.query." + (has ? "has" : "has_not"), finalSave), false);
+
+                    return has ? 1 : 0;
+                }))))
+        );
     }
 }

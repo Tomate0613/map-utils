@@ -20,6 +20,8 @@
   "commands.map_utils.inventory.loaded": "Loaded inventory '%s'",
   "commands.map_utils.inventory.missing": "Could not find inventory '%s'",
   "commands.map_utils.inventory.list": "Listing inventories:",
+  "commands.map_utils.inventory.query.has": "Inventory '%s' exists",
+  "commands.map_utils.inventory.query.has_not": "Inventory '%s' does not exist",
   "commands.map_utils.pets.store": "Saved pets to '%s'",
   "commands.map_utils.pets.load": "Loaded pets from '%s'",
   "commands.map_utils.pets.missing": "Could not find pets in '%s'",

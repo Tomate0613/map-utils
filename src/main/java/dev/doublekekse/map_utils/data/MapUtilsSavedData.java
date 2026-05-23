@@ -68,6 +68,15 @@ public class MapUtilsSavedData extends SavedData {
         return true;
     }
 
+    public boolean hasInventories(String id) {
+        var tag = inventories.get(id);
+        if (tag == null || tag.asCompound().isEmpty()) {
+            return false;
+        }
+
+        return true;
+    }
+
     public @NotNull CompoundTag save() {
         var tag = new CompoundTag();
 
