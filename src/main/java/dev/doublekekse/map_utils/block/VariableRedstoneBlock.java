@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public class VariableRedstoneBlock extends Block {
     public static final IntegerProperty POWER = IntegerProperty.create("power", 0, 15);
@@ -24,7 +25,7 @@ public class VariableRedstoneBlock extends Block {
     }
 
     @Override
-    protected @NotNull InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult blockHitResult) {
+    protected @NotNull InteractionResult useWithoutItem(BlockState blockState, @NonNull Level level, @NonNull BlockPos blockPos, Player player, @NonNull BlockHitResult blockHitResult) {
         var signal = blockState.getValue(POWER);
         var newSignalStrength = signal + (player.isShiftKeyDown() ? -1 : 1);
 
@@ -39,15 +40,15 @@ public class VariableRedstoneBlock extends Block {
     }
 
     @Override
-    public int getSignal(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, Direction direction) {
+    public int getSignal(BlockState blockState, @NonNull BlockGetter blockGetter, @NonNull BlockPos blockPos, @NonNull Direction direction) {
         return blockState.getValue(POWER);
     }
 
-    public boolean hasAnalogOutputSignal(BlockState blockState) {
+    public boolean hasAnalogOutputSignal(@NonNull BlockState blockState) {
         return true;
     }
 
-    public boolean isSignalSource(BlockState blockState) {
+    public boolean isSignalSource(@NonNull BlockState blockState) {
         return true;
     }
 
