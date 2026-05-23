@@ -1,6 +1,5 @@
 package dev.doublekekse.map_utils.block.timer;
 
-import dev.doublekekse.map_utils.MapUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -14,6 +13,7 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import static dev.doublekekse.map_utils.registry.MapUtilsBlockEntities.TIMER_BLOCK_ENTITY;
 
@@ -101,7 +101,7 @@ public class TimerBlockEntity extends BlockEntity {
     }
 
     @Override
-    public @NotNull CompoundTag getUpdateTag(HolderLookup.Provider provider) {
+    public @NotNull CompoundTag getUpdateTag(HolderLookup.@NonNull Provider provider) {
         CompoundTag compoundTag = new CompoundTag();
 
         compoundTag.putInt("interval", interval);

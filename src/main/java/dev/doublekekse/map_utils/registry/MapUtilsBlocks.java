@@ -1,6 +1,7 @@
 package dev.doublekekse.map_utils.registry;
 
 import dev.doublekekse.map_utils.MapUtils;
+import dev.doublekekse.map_utils.block.TriggerableRedstoneBlock;
 import dev.doublekekse.map_utils.block.VariableRedstoneBlock;
 import dev.doublekekse.map_utils.block.timer.TimerBlock;
 import net.minecraft.core.Registry;
@@ -26,6 +27,15 @@ public class MapUtilsBlocks {
             .sound(SoundType.METAL)
             .isRedstoneConductor(Blocks::never)
         , "variable_redstone_block", true);
+
+    public static final TriggerableRedstoneBlock TRIGGERABLE_REDSTONE_BLOCK = register(
+        TriggerableRedstoneBlock::new, BlockBehaviour.Properties.of()
+            .mapColor(MapColor.FIRE)
+            .requiresCorrectToolForDrops()
+            .strength(5.0F, 6.0F)
+            .sound(SoundType.METAL)
+            .isRedstoneConductor(Blocks::never)
+        , "triggerable_redstone_block", true);
 
     public static final TimerBlock TIMER_BLOCK = register(TimerBlock::new,
         BlockBehaviour.Properties.of()

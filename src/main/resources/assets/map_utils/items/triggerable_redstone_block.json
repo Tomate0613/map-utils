@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "map_utils:block/triggerable_redstone_block"
+  }
+}

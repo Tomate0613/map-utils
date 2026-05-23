@@ -2,6 +2,7 @@ package dev.doublekekse.map_utils.client;
 
 import dev.doublekekse.map_utils.client.path.PathRenderer;
 import dev.doublekekse.map_utils.command.ClientPathEditorCommand;
+import dev.doublekekse.map_utils.command.ClientMapUtilsCommand;
 import dev.doublekekse.map_utils.data.MapUtilsSavedData;
 import dev.doublekekse.map_utils.gizmo.PathGizmos;
 import dev.doublekekse.map_utils.packet.*;
@@ -29,6 +30,7 @@ public class MapUtilsClient implements ClientModInitializer {
 
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             ClientPathEditorCommand.register(dispatcher);
+            ClientMapUtilsCommand.register(dispatcher);
         });
 
         LevelRenderEvents.BEFORE_GIZMOS.register((ctx) -> {

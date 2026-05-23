@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "powered=true": { "model": "map_utils:block/triggerable_redstone_block" },
+    "powered=false": { "model": "map_utils:block/triggerable_redstone_block_off" }
+  }
+}
+
