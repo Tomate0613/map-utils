@@ -76,8 +76,8 @@ public class TimerEditScreen extends Screen {
     public void extractRenderState(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
         super.extractRenderState(graphics, mouseX, mouseY, a);
 
-        graphics.text(this.font, Component.translatable("gui.map_utils.timer.duration.label"), this.width / 2 - 100, 10, 10526880);
-        graphics.text(this.font, Component.translatable("gui.map_utils.timer.interval.label"), this.width / 2 - 100, 50, 10526880);
-        graphics.text(this.font, Component.translatable("gui.map_utils.timer.tick_unloaded.label"), this.width / 2 - 100, 90, 10526880);
+        graphics.text(this.font, Component.translatable("gui.map_utils.timer.duration.label"), this.width / 2 - 100, 10, 0xffa0a0a0);
+        graphics.text(this.font, Component.translatable("gui.map_utils.timer.interval.label"), this.width / 2 - 100, 50, 0xffa0a0a0);
+        graphics.text(this.font, Component.translatable("gui.map_utils.timer.tick_unloaded.label"), this.width / 2 - 100, 90, 0xffa0a0a0);
     }
 }
