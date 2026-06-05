@@ -4,6 +4,9 @@ import com.mojang.serialization.Codec;
 import dev.doublekekse.map_utils.MapUtils;
 import dev.doublekekse.map_utils.curve.SplinePath;
 import dev.doublekekse.map_utils.duck.InventoryDuck;
+import eu.pb4.trinkets.api.TrinketsApi;
+import eu.pb4.trinkets.impl.LivingEntityTrinketAttachment;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.server.MinecraftServer;
@@ -41,6 +44,22 @@ public class MapUtilsSavedData extends SavedData {
         player.getInventory().save(inventory.list("minecraft:inventory", ItemStackWithSlot.CODEC));
         ((InventoryDuck) player.getInventory()).mapUtils$saveEquipment(inventory.list("minecraft:equipment", ItemStackWithSlot.CODEC));
 
+
+        if (FabricLoader.getInstance().isModLoaded("trinkets")) {
+            System.out.println("TRINKETS");
+            var attachment = TrinketsApi.getAttachment(player);
+
+            if (attachment instanceof LivingEntityTrinketAttachment att && attachment.isEquipped(stack -> !stack.isEmpty())) {
+                att.writeData(inventory.child("trinkets:data"));
+
+                if (remove) {
+                    att.clearContents();
+                    att.update();
+                }
+            }
+        }
+
+
         if (remove) {
             player.getInventory().clearContent();
         }
@@ -59,6 +78,14 @@ public class MapUtilsSavedData extends SavedData {
 
         inventory.list("minecraft:inventory", ItemStackWithSlot.CODEC).ifPresent(itemStackWithSlots -> player.getInventory().load(itemStackWithSlots));
         inventory.list("minecraft:equipment", ItemStackWithSlot.CODEC).ifPresent(itemStackWithSlots -> ((InventoryDuck) player.getInventory()).mapUtils$loadEquipment(itemStackWithSlots));
+
+        if (FabricLoader.getInstance().isModLoaded("trinkets")) {
+            var attachment = TrinketsApi.getAttachment(player);
+
+            if (attachment instanceof LivingEntityTrinketAttachment att) {
+                inventory.child("trinkets:data").ifPresent(att::readData);
+            }
+        }
 
         if (remove) {
             inventories.remove(id);
