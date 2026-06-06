@@ -46,7 +46,6 @@ public class MapUtilsSavedData extends SavedData {
 
 
         if (FabricLoader.getInstance().isModLoaded("trinkets")) {
-            System.out.println("TRINKETS");
             var attachment = TrinketsApi.getAttachment(player);
 
             if (attachment instanceof LivingEntityTrinketAttachment att && attachment.isEquipped(stack -> !stack.isEmpty())) {
