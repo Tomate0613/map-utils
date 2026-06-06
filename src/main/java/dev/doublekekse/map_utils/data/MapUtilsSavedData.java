@@ -83,7 +83,14 @@ public class MapUtilsSavedData extends SavedData {
             var attachment = TrinketsApi.getAttachment(player);
 
             if (attachment instanceof LivingEntityTrinketAttachment att) {
-                inventory.child("trinkets:data").ifPresent(att::readData);
+                var d = inventory.child("trinkets:data");
+                d.ifPresent(att::readData);
+
+                if (d.isEmpty()) {
+                    att.clearContents();
+                }
+
+                att.update();
             }
         }
 
@@ -97,11 +104,7 @@ public class MapUtilsSavedData extends SavedData {
 
     public boolean hasInventories(String id) {
         var tag = inventories.get(id);
-        if (tag == null || tag.asCompound().isEmpty()) {
-            return false;
-        }
-
-        return true;
+        return tag != null && tag.asCompound().isPresent();
     }
 
     public @NotNull CompoundTag save() {
