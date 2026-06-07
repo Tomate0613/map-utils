@@ -228,6 +228,7 @@ public class PathCommand {
 
                     data.entity.setPos(pos);
                     data.entity.absSnapRotationTo(rot.x, rot.y);
+                    data.entity.setYHeadRot(rot.x);
                 }
             }
         });
