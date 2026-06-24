@@ -46,6 +46,7 @@
   "commands.redstone.trigger": "Triggered block at %s %s %s",
   "commands.map_utils.path_editor.toggle.enable": "Enabled path editor",
   "commands.map_utils.path_editor.toggle.disable": "Disabled path editor",
+  "commands.map_utils.credits": "Showing credits to %s",
   "gui.map_utils.copy.confirm": "Do you want to copy this to your clipboard?",
   "gui.map_utils.suggest_command.confirm": "Do you want to edit or run this command?",
   "gui.map_utils.screen.timer_edit": "Edit Timer",

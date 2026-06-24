@@ -13,6 +13,7 @@ public class MapUtilsPackets {
         PayloadTypeRegistry.clientboundPlay().register(CameraSplinePacket.TYPE, CameraSplinePacket.STREAM_CODEC);
         PayloadTypeRegistry.clientboundPlay().register(ClickEventPacket.TYPE, ClickEventPacket.STREAM_CODEC);
         PayloadTypeRegistry.clientboundPlay().register(ClientboundSyncDataPacket.TYPE, ClientboundSyncDataPacket.STREAM_CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(ClientboundCreditsPacket.TYPE, ClientboundCreditsPacket.STREAM_CODEC);
 
         PayloadTypeRegistry.serverboundPlay().register(SetTimerBlockPacket.TYPE, SetTimerBlockPacket.STREAM_CODEC);
         PayloadTypeRegistry.serverboundPlay().register(SavePathPacket.TYPE, SavePathPacket.STREAM_CODEC);

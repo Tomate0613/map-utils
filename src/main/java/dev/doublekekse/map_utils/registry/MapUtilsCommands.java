@@ -19,6 +19,7 @@ public class MapUtilsCommands {
                 PathCommand.register(dispatcher);
                 AccelerateCommand.register(dispatcher);
                 PetsCommand.register(dispatcher);
+                CreditsCommand.register(dispatcher);
             }
         );
 

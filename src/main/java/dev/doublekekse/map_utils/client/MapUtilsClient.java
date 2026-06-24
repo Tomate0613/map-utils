@@ -27,6 +27,7 @@ public class MapUtilsClient implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(CameraFovPacket.TYPE, CameraHandlers::handleFov);
         ClientPlayNetworking.registerGlobalReceiver(ClickEventPacket.TYPE, ClickEventHandler::handle);
         ClientPlayNetworking.registerGlobalReceiver(ClientboundSyncDataPacket.TYPE, ClientboundSyncDataPacket::handle);
+        ClientPlayNetworking.registerGlobalReceiver(ClientboundCreditsPacket.TYPE, ClientboundCreditsPacket::handle);
 
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             ClientPathEditorCommand.register(dispatcher);
