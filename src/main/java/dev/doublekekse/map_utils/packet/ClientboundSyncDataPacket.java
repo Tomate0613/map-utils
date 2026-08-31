@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+// TODO: not play phase
 public record ClientboundSyncDataPacket(MapUtilsSavedData savedData) implements CustomPacketPayload {
     public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundSyncDataPacket> STREAM_CODEC = CustomPacketPayload.codec(ClientboundSyncDataPacket::write, ClientboundSyncDataPacket::load);
     public static final CustomPacketPayload.Type<ClientboundSyncDataPacket> TYPE = new CustomPacketPayload.Type<>(MapUtils.id("clientbound_sync_data"));

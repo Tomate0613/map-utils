@@ -11,7 +11,7 @@
     "AbstractClientPlayerMixin",
     "CameraMixin",
     "GameRendererMixin",
-    "GuiMixin",
+    "HudMixin",
     "LocalPlayerMixin",
     "MinecraftMixin"
   ],

@@ -27,5 +27,4 @@ public record ClickEventPacket(ClickEvent.Action action, String value) implement
         buf.writeEnum(action);
         buf.writeUtf(value);
     }
-
 }

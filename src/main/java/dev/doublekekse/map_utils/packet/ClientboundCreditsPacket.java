@@ -22,8 +22,8 @@ public record ClientboundCreditsPacket(boolean showPoem) implements CustomPacket
 
     @Environment(EnvType.CLIENT)
     public void handle(ClientPlayNetworking.Context context) {
-        context.client().setScreen(new WinScreen(showPoem, () -> {
-            context.client().setScreen(null);
+        context.client().setScreenAndShow(new WinScreen(showPoem, () -> {
+            context.client().setScreenAndShow(null);
         }));
     }
 }

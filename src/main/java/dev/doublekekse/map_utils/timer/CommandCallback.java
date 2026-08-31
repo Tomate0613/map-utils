@@ -61,7 +61,10 @@ public record CommandCallback(ResourceKey<Level> dimension, @NotNull Optional<UU
         }
 
         // TODO
-        var stack = new CommandSourceStack(CommandSource.NULL, position, rotation, level, LevelBasedPermissionSet.forLevel(PermissionLevel.GAMEMASTERS), name, nameComponent, level.getServer(), entity);
+//        var stack = ;
+        var stack = entity == null
+            ? new CommandSourceStack(CommandSource.NULL, position, rotation, level, LevelBasedPermissionSet.forLevel(PermissionLevel.GAMEMASTERS), nameComponent, level.getServer())
+            : new CommandSourceStack(CommandSource.NULL, position, rotation, level, LevelBasedPermissionSet.forLevel(PermissionLevel.GAMEMASTERS), level.getServer(), entity);
 
         if (FabricLoader.getInstance().isModLoaded("player_roles")) {
             PlayerRoleCompatibility.applyCommandIdentityType(stack);

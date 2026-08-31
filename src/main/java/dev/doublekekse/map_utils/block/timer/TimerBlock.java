@@ -21,15 +21,8 @@ import org.jetbrains.annotations.Nullable;
 import static dev.doublekekse.map_utils.registry.MapUtilsBlockEntities.TIMER_BLOCK_ENTITY;
 
 public class TimerBlock extends BaseEntityBlock {
-    public static final MapCodec<TimerBlock> CODEC = simpleCodec(TimerBlock::new);
-
     public TimerBlock(BlockBehaviour.Properties properties) {
         super(properties);
-    }
-
-    @Override
-    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     @Nullable

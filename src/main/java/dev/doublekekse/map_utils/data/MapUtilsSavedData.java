@@ -53,7 +53,8 @@ public class MapUtilsSavedData extends SavedData {
 
                 if (remove) {
                     att.clearContents();
-                    att.update();
+                    // ?? TODO Check
+                    // att.update();
                 }
             }
         }
@@ -89,7 +90,8 @@ public class MapUtilsSavedData extends SavedData {
                     att.clearContents();
                 }
 
-                att.update();
+                // TODO Same thing here
+//                att.update();
             }
         }
 

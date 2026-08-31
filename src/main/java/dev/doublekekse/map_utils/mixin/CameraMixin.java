@@ -20,10 +20,10 @@ public abstract class CameraMixin {
     private boolean detached;
 
     @Shadow
-    protected abstract void setPosition(Vec3 vec3);
+    protected abstract void setPosition(Vec3 position);
 
     @Shadow
-    protected abstract void setRotation(float f, float g);
+    protected abstract void setRotation(float yRot, float xRot);
 
     @Shadow
     private Vec3 position;

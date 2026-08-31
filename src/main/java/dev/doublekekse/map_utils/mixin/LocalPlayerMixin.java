@@ -15,6 +15,6 @@ public class LocalPlayerMixin implements PlayerDuck {
 
     @Override
     public void mapUtils$openTimerBlock(TimerBlockEntity timerBlockEntity) {
-        this.minecraft.setScreen(new TimerEditScreen(timerBlockEntity));
+        this.minecraft.setScreenAndShow(new TimerEditScreen(timerBlockEntity));
     }
 }

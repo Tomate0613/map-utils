@@ -1,14 +1,11 @@
 package dev.doublekekse.map_utils.gizmo;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.core.Direction;
 import net.minecraft.gizmos.GizmoStyle;
 import net.minecraft.gizmos.Gizmos;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,16 +40,6 @@ public class Gizmo {
         onPositionChange.accept(position);
     }
 
-    void drawLine(LevelRenderContext ctx, PoseStack.Pose pose, Vector3f offset, int color) {
-        var normal = ctx.levelState().cameraRenderState.orientation.transform(new Vector3f(0, 0, -1)).mul(-1);
-        var lineConsumer = ctx.bufferSource().getBuffer(RenderTypes.LINES);
-
-        var fPos = position.toVector3f();
-
-        lineConsumer.addVertex(pose, fPos).setColor(color).setNormal(pose, normal.x, normal.y, normal.z).setLineWidth(2.5f);
-        lineConsumer.addVertex(pose, fPos.add(offset)).setColor(color).setNormal(pose, normal.x, normal.y, normal.z).setLineWidth(2.5f);
-    }
-
     public AABB getAABB() {
         var radius = .1;
         return new AABB(position.x - radius, position.y - radius, position.z - radius, position.x + radius, position.y + radius, position.z + radius);
@@ -84,7 +71,7 @@ public class Gizmo {
         }
 
         for (var axis : getAxes()) {
-            drawLine(ctx, pose, axis.dir().toVector3f(), axis.color());
+            Gizmos.arrow(position, position.add(axis.dir()), axis.color());
         }
     }
 }
