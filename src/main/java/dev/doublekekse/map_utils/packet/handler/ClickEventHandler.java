@@ -31,7 +31,7 @@ public class ClickEventHandler {
                 try {
                     var scheme = new URI(packet.value()).getScheme();
                     if (scheme.equals("https") || scheme.equals("http")) {
-                        ConfirmLinkScreen.confirmLinkNow(minecraft.gui.screen(), packet.value());
+                        ConfirmLinkScreen.confirmLinkNow(minecraft.gui.screen(), URI.create(packet.value()));
                     }
                 } catch (Exception _) {
                     return;
