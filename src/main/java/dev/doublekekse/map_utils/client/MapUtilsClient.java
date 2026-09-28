@@ -1,6 +1,8 @@
 package dev.doublekekse.map_utils.client;
 
+import dev.doublekekse.map_utils.client.blockentity.AnnotationRenderer;
 import dev.doublekekse.map_utils.client.path.PathRenderer;
+import dev.doublekekse.map_utils.command.ClientAnnotationsCommand;
 import dev.doublekekse.map_utils.command.ClientPathEditorCommand;
 import dev.doublekekse.map_utils.command.ClientMapUtilsCommand;
 import dev.doublekekse.map_utils.data.MapUtilsSavedData;
@@ -8,15 +10,18 @@ import dev.doublekekse.map_utils.gizmo.PathGizmos;
 import dev.doublekekse.map_utils.packet.*;
 import dev.doublekekse.map_utils.packet.handler.CameraHandlers;
 import dev.doublekekse.map_utils.packet.handler.ClickEventHandler;
+import dev.doublekekse.map_utils.registry.MapUtilsBlockEntities;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 
 public class MapUtilsClient implements ClientModInitializer {
     public static MapUtilsSavedData clientSavedData;
     public static boolean pathEditorEnabled;
+    public static AnnotationVisibility annotationVisibility = AnnotationVisibility.ALWAYS_ON_TOP;
 
     @Override
     public void onInitializeClient() {
@@ -32,6 +37,7 @@ public class MapUtilsClient implements ClientModInitializer {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             ClientPathEditorCommand.register(dispatcher);
             ClientMapUtilsCommand.register(dispatcher);
+            ClientAnnotationsCommand.register(dispatcher);
         });
 
         LevelRenderEvents.BEFORE_GIZMOS.register((ctx) -> {
@@ -58,5 +64,13 @@ public class MapUtilsClient implements ClientModInitializer {
 
             poseStack.popPose();
         });
+
+        BlockEntityRenderers.register(MapUtilsBlockEntities.ANNOTATION_BLOCK_ENTITY, AnnotationRenderer::new);
+    }
+
+    public enum AnnotationVisibility {
+        HIDDEN,
+        ALWAYS_ON_TOP,
+        NORMAL
     }
 }

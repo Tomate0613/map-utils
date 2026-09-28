@@ -1,6 +1,7 @@
 package dev.doublekekse.map_utils.registry;
 
 import dev.doublekekse.map_utils.MapUtils;
+import dev.doublekekse.map_utils.block.annotation.AnnotationBlock;
 import dev.doublekekse.map_utils.block.TriggerableRedstoneBlock;
 import dev.doublekekse.map_utils.block.VariableRedstoneBlock;
 import dev.doublekekse.map_utils.block.timer.TimerBlock;
@@ -15,6 +16,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 
 import java.util.function.Function;
 
@@ -41,6 +43,20 @@ public class MapUtilsBlocks {
         BlockBehaviour.Properties.of()
             .sound(SoundType.COPPER_BULB)
         , "timer_block",
+        true
+    );
+
+    public static final AnnotationBlock ANNOTATION_BLOCK = register(AnnotationBlock::new,
+        BlockBehaviour.Properties.of()
+            .sound(SoundType.COPPER_BULB)
+            .strength(-1.0F, 3600000.8F)
+            .mapColor(MapColor.NONE)
+            .noLootTable()
+            .noOcclusion()
+            .isValidSpawn(Blocks::never)
+            .noTerrainParticles()
+            .pushReaction(PushReaction.IMMOVEABLE)
+        , "annotation_block",
         true
     );
 

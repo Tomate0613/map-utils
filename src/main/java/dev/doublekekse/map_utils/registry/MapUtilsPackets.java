@@ -18,9 +18,11 @@ public class MapUtilsPackets {
         PayloadTypeRegistry.serverboundPlay().register(SetTimerBlockPacket.TYPE, SetTimerBlockPacket.STREAM_CODEC);
         PayloadTypeRegistry.serverboundPlay().register(SavePathPacket.TYPE, SavePathPacket.STREAM_CODEC);
         PayloadTypeRegistry.serverboundPlay().register(ServerboundModifyControlPointPacket.TYPE, ServerboundModifyControlPointPacket.STREAM_CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(ServerboundUpdateAnnotationPacket.TYPE, ServerboundUpdateAnnotationPacket.STREAM_CODEC);
 
         ServerPlayNetworking.registerGlobalReceiver(SetTimerBlockPacket.TYPE, SetTimerBlockPacket::handle);
         ServerPlayNetworking.registerGlobalReceiver(SavePathPacket.TYPE, SavePathPacket::handle);
         ServerPlayNetworking.registerGlobalReceiver(ServerboundModifyControlPointPacket.TYPE, ServerboundModifyControlPointPacket::handle);
+        ServerPlayNetworking.registerGlobalReceiver(ServerboundUpdateAnnotationPacket.TYPE, ServerboundUpdateAnnotationPacket::handle);
     }
 }

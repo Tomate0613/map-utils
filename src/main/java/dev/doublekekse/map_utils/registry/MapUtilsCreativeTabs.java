@@ -16,6 +16,7 @@ public class MapUtilsCreativeTabs {
             content.accept(TRIGGERABLE_REDSTONE_BLOCK);
             content.accept(VARIABLE_REDSTONE_BLOCK);
             content.accept(TIMER_BLOCK);
+            content.accept(ANNOTATION_BLOCK);
         });
     }
 }

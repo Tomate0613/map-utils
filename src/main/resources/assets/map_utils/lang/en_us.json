@@ -3,6 +3,7 @@
   "block.map_utils.triggerable_redstone_block": "Triggerable Redstone Block",
   "block.map_utils.entity_barrier": "Entity Barrier",
   "block.map_utils.timer_block": "Redstone Timer",
+  "block.map_utils.annotation_block": "Annotation",
   "commands.map_utils.no_entity": "This command may only be executed by entities",
   "commands.map_utils.no_entity_hit_result": "Not looking at any entity",
   "commands.map_utils.no_entity_id": "Entity type does not have an identifier",
@@ -47,6 +48,9 @@
   "commands.map_utils.path_editor.toggle.enable": "Enabled path editor",
   "commands.map_utils.path_editor.toggle.disable": "Disabled path editor",
   "commands.map_utils.credits": "Showing credits to %s",
+  "commands.map_utils.annotations.hidden": "Annotations are now hidden",
+  "commands.map_utils.annotations.always_on_top": "Annotations: always_on_top",
+  "commands.map_utils.annotations.normal": "Annotations: hide_behind_walls",
   "gui.map_utils.copy.confirm": "Do you want to copy this to your clipboard?",
   "gui.map_utils.suggest_command.confirm": "Do you want to edit or run this command?",
   "gui.map_utils.screen.timer_edit": "Edit Timer",
@@ -57,5 +61,6 @@
   "gui.map_utils.timer.tick_unloaded": "Tick Unloaded",
   "gui.map_utils.timer.tick_unloaded.label": "Tick Unloaded:",
   "gui.map_utils.timer.tick_unloaded.tooltip": "Tick Unloaded\nCompensates for missed ticks when the block gets loaded again by triggering once.\n\nThis does not affect performance",
+  "gui.map_utils.screen.annotation_edit": "Edit Annotation",
   "commands.clickevent.success": "Sent clickevent"
 }

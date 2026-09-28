@@ -1,6 +1,7 @@
 package dev.doublekekse.map_utils.registry;
 
 import dev.doublekekse.map_utils.MapUtils;
+import dev.doublekekse.map_utils.block.annotation.AnnotationBlockEntity;
 import dev.doublekekse.map_utils.block.timer.TimerBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.core.Registry;
@@ -9,10 +10,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
+import static dev.doublekekse.map_utils.registry.MapUtilsBlocks.ANNOTATION_BLOCK;
 import static dev.doublekekse.map_utils.registry.MapUtilsBlocks.TIMER_BLOCK;
 
 public class MapUtilsBlockEntities {
     public static final BlockEntityType<TimerBlockEntity> TIMER_BLOCK_ENTITY = register("timer_block", TimerBlockEntity::new, TIMER_BLOCK);
+    public static final BlockEntityType<AnnotationBlockEntity> ANNOTATION_BLOCK_ENTITY = register("annotation_block", AnnotationBlockEntity::new, ANNOTATION_BLOCK);
 
 
     private static <T extends BlockEntity> BlockEntityType<T> register(
