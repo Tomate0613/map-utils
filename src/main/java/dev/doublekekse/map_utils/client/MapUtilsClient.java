@@ -1,7 +1,9 @@
 package dev.doublekekse.map_utils.client;
 
+import dev.doublekekse.map_utils.block.annotation.AnnotationBlockEntity;
 import dev.doublekekse.map_utils.client.blockentity.AnnotationRenderer;
 import dev.doublekekse.map_utils.client.path.PathRenderer;
+import dev.doublekekse.map_utils.client.screen.AnnotationEditScreen;
 import dev.doublekekse.map_utils.command.ClientAnnotationsCommand;
 import dev.doublekekse.map_utils.command.ClientPathEditorCommand;
 import dev.doublekekse.map_utils.command.ClientMapUtilsCommand;
@@ -72,5 +74,9 @@ public class MapUtilsClient implements ClientModInitializer {
         HIDDEN,
         ALWAYS_ON_TOP,
         NORMAL
+    }
+
+    public static void openAnnotation(AnnotationBlockEntity annotation) {
+        Minecraft.getInstance().setScreenAndShow(new AnnotationEditScreen(annotation));
     }
 }

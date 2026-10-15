@@ -1,8 +1,7 @@
 package dev.doublekekse.map_utils.block.annotation;
 
-import dev.doublekekse.map_utils.client.screen.AnnotationEditScreen;
+import dev.doublekekse.map_utils.client.MapUtilsClient;
 import dev.doublekekse.map_utils.registry.MapUtilsBlocks;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -37,7 +36,7 @@ public class AnnotationBlock extends BaseEntityBlock {
         }
 
         if (level.isClientSide()) {
-            Minecraft.getInstance().setScreenAndShow(new AnnotationEditScreen(annotation));
+            MapUtilsClient.openAnnotation(annotation);
         }
 
         return InteractionResult.SUCCESS;
@@ -45,11 +44,11 @@ public class AnnotationBlock extends BaseEntityBlock {
 
     @Override
     public void setPlacedBy(final Level level, final BlockPos pos, final BlockState state, @Nullable final LivingEntity by, final ItemStack itemStack) {
-        if (level.isClientSide() || !state.is(MapUtilsBlocks.ANNOTATION_BLOCK) || !(level.getBlockEntity(pos) instanceof AnnotationBlockEntity annotation)) {
+        if (!level.isClientSide() || !state.is(MapUtilsBlocks.ANNOTATION_BLOCK) || !(level.getBlockEntity(pos) instanceof AnnotationBlockEntity annotation)) {
             return;
         }
 
-        Minecraft.getInstance().setScreenAndShow(new AnnotationEditScreen(annotation));
+        MapUtilsClient.openAnnotation(annotation);
     }
 
     @Override
